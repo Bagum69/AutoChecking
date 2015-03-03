@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">AutoChecking</string>
+    <string name="action_settings">Настройки</string>
+    <string name="search_hint">Поиск</string>
+    <string name="voicePromtText">Скажите искомую фразу</string>
+    <string name="action_bar_search"></string>
+</resources>
