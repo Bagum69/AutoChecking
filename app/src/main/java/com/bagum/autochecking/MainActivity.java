@@ -11,10 +11,12 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import java.util.List;
 
+import db.DBAdapter;
 import db.DBController;
 
 
@@ -23,16 +25,28 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     private static final String TAG = DBController.class.getSimpleName();
 
     private SearchView mSearchView;
+    public static DBController dbCont = null;
     public static SimpleCursorAdapter adapter = null;
+    public static DBAdapter adapterfuel = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = DBController.getAdapter(getBaseContext());
+        dbCont = new DBController(getBaseContext());
+
+        adapter = dbCont.getAdapter(getBaseContext());
+        adapterfuel = dbCont.getAdapterFuel(getBaseContext());
 
         handleIntent(getIntent());
+
+        final ListView lv = (ListView) findViewById(R.id.alist);
+        lv.setAdapter(adapter);
+
+        final ListView fv = (ListView) findViewById(R.id.flist);
+        fv.setAdapter(adapterfuel);
+
     }
 
     @Override
@@ -49,7 +63,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     }
 
     private void doSearch(String newText) {
-        //mStatusView.setText("Query = " + newText);
+        Log.d(TAG, "Voice query = " + newText);
         DBController.changeCursor(getBaseContext(), MainActivity.adapter, newText);
     }
 
