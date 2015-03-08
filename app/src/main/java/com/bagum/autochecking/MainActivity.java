@@ -11,11 +11,14 @@ import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 
 import java.util.List;
-
 import db.DBAdapter;
 import db.DBController;
 
@@ -27,6 +30,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     private SearchView mSearchView;
     public static DBController dbCont = null;
     public static SimpleCursorAdapter adapter = null;
+    public static SimpleCursorAdapter adapterSpin = null;
     public static DBAdapter adapterfuel = null;
 
     @Override
@@ -37,15 +41,29 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         dbCont = new DBController(getBaseContext());
 
         adapter = dbCont.getAdapter(getBaseContext());
-        adapterfuel = dbCont.getAdapterFuel(getBaseContext());
 
         handleIntent(getIntent());
 
-        final ListView lv = (ListView) findViewById(R.id.alist);
-        lv.setAdapter(adapter);
+
+        adapterSpin = dbCont.getAdapterSpin2(getBaseContext());
+        Spinner spinner = (Spinner) findViewById(R.id.spinner);
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
+                dbCont.changeCursorFuel(adapterfuel, id);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
+        });
+        spinner.setAdapter(adapterSpin);
+
+
 
         final ListView fv = (ListView) findViewById(R.id.flist);
+        adapterfuel = dbCont.getAdapterFuel(getBaseContext());
+        dbCont.changeCursorFuel(adapterfuel, fv.getSelectedItemId());
         fv.setAdapter(adapterfuel);
+        View v = getLayoutInflater().inflate(R.layout.row_fuel_header, null);
+        fv.addHeaderView(v);
 
     }
 
@@ -64,7 +82,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
 
     private void doSearch(String newText) {
         Log.d(TAG, "Voice query = " + newText);
-        DBController.changeCursor(getBaseContext(), MainActivity.adapter, newText);
+        dbCont.changeCursor(MainActivity.adapter, newText);
     }
 
 
@@ -108,6 +126,14 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         if (id == R.id.action_settings) {
             return true;
         }
+        if (id == R.id.test_xml) {
+            Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
+            startActivity(intent);
+
+            return true;
+        }
+
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -127,7 +153,36 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     @Override
     public boolean onQueryTextChange(String s) {
         Log.d(TAG, "Query = " + s);
-        DBController.changeCursor(getBaseContext(), MainActivity.adapter, s);
+        DBController.changeCursor(MainActivity.adapter, s);
         return true;
     }
 }
+
+/*
+        final ListView lv = (ListView) findViewById(R.id.alist);
+
+        lv.setItemsCanFocus(false);
+        lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+        lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                Log.d(TAG, "itemClick: position = " + position + ", id = "
+                        + id);
+                dbCont.changeCursorFuel(adapterfuel, id);
+            }
+        });
+        lv.setOnItemSelectedListener(new OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view,
+                                       int position, long id) {
+                Log.d(TAG, "itemSelect: position = " + position + ", id = "
+                        + id);
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                Log.d(TAG, "itemSelect: nothing");
+            }
+
+        });
+*/

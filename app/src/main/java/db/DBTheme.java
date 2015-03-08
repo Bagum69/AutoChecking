@@ -48,6 +48,7 @@ public class DBTheme {
         public static final String DEFAULT_SORT = FuelColumns.DATE + " DESC";
         public static final String TABLE_CONT = "Fueling"; //имя таблицы
         private long id; //наш айдишник
+        private long id_auto;
         private Date date;
         private Long odo;
 
@@ -66,8 +67,12 @@ public class DBTheme {
             this.odo = odo;
         }
         public class FuelColumns implements BaseColumns {
+            public static final String ID_AUTO = "id_auto";
             public static final String DATE = "date";
             public static final String ODO = "odo";
+            public static final String TRIP = "trip";
+            public static final String SUMMA = "summa";
+            public static final String LITR = "litr";
         }
     }
 

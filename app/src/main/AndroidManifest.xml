@@ -23,7 +23,10 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-
+        </activity>
+        <activity
+            android:name=".FuelEditorActivity"
+            android:label="@string/title_activity_fuel_editor" >
         </activity>
     </application>
 

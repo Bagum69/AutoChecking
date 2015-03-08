@@ -4,57 +4,54 @@
     android:layout_width="fill_parent"
     android:orientation="horizontal"
     android:layout_height="wrap_content"
-    android:weightSum="1">
+    android:weightSum="1"
+    android:id="@+id/row_fuel_header"
+    android:background="@color/button_material_light">
 
 
     <TextView
         android:layout_width="75dp"
         android:layout_height="wrap_content"
-        android:id="@+id/date"
-        android:textSize="12sp"
-        android:textIsSelectable="false" />
+        android:editable="false"
+        android:textSize="14sp"
+        android:text="Date" />
 
     <TextView
         android:layout_width="55dp"
         android:layout_height="wrap_content"
-        android:id="@+id/odo"
-        android:textSize="12sp"
-        android:textAlignment="textEnd"
-        android:gravity="end" />
+        android:textSize="14sp"
+        android:text="Odo"
+        />
 
     <TextView
         android:layout_width="45dp"
         android:layout_height="wrap_content"
-        android:id="@+id/trip"
-        android:textSize="12sp"
-        android:textAlignment="textEnd"
-        android:gravity="end"/>
+        android:textSize="14sp"
+
+        android:text="Trip"
+        />
 
     <TextView
         android:layout_width="60dp"
         android:layout_height="wrap_content"
-        android:id="@+id/summa"
-        android:textSize="12sp"
-        android:textAlignment="textEnd"
+        android:text="Summa"
+        android:textSize="14sp"
         android:gravity="end"
-        />
+        android:layout_weight="0.15" />
 
     <TextView
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:id="@+id/price"
-        android:textSize="12sp"
-        android:textAlignment="textEnd"
+        android:text="Price"
+        android:textSize="14sp"
         android:gravity="end"
-        />
+        android:layout_weight="0.15" />
 
     <TextView
         android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:id="@+id/litr"
-        android:textSize="12sp"
-        android:textAlignment="textEnd"
-        android:gravity="end"
-        />
+        android:text="Liters"
+        android:textSize="14sp"
 
+        android:layout_weight="0.15" />
 </LinearLayout>
