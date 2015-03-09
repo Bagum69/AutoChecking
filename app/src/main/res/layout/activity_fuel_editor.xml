@@ -26,6 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/feLabelOdo"
+        android:singleLine="true"
         android:id="@+id/textView4" />
 
     <EditText
@@ -92,7 +93,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/feBtnSave"
-        android:id="@+id/button"
+        android:id="@+id/fe_btn_save"
         android:focusable="true">
         <requestFocus/>
     </Button>

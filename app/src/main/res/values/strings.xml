@@ -4,13 +4,12 @@
     <string name="search_hint">Поиск</string>
     <string name="voicePromtText">Скажите искомую фразу</string>
     <string name="action_bar_search"></string>
-    <string name="test_xml">Fuel Editor</string>
+    <string name="addFuel">Add fueling</string>
+    <string name="updateFuel">Edit fueling</string>
     <string name="spinner_auto_prompt">Select auto</string>
     <string name="select_auto_title">Select auto</string>
     <string name="statistic_label">Statistics</string>
     <string name="title_activity_fuel_editor">FuelEditorActivity</string>
-
-    <string name="hello_world">Hello world!</string>
     <string name="feDateLabel">Date</string>
     <string name="feLabelOdo">Odo</string>
     <string name="feLabelTrip">Trip</string>

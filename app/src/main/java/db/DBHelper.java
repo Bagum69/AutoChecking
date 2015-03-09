@@ -75,18 +75,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 + FuelColumns.SUMMA+ " REAL NOT NULL, "
                 + FuelColumns.LITR+ " REAL NOT NULL "
                 +");" );
-/*
-        Date d = new Date();
-        db.execSQL("INSERT INTO " + Fueling.TABLE_CONT + "("+FuelColumns.ID_AUTO + ", " +
-                FuelColumns.DATE+", "+FuelColumns.ODO+") "+ "VALUES ('1', '"+ d.getTime()  +"', '234998');");
-        db.execSQL("INSERT INTO " + Fueling.TABLE_CONT + "("+FuelColumns.ID_AUTO + ", " +
-                FuelColumns.DATE+", "+FuelColumns.ODO+") "+ "VALUES ('1', '"+ d.getTime()  +"', '235001');");
 
-        db.execSQL("INSERT INTO " + Fueling.TABLE_CONT + "("+FuelColumns.ID_AUTO + ", " +
-                FuelColumns.DATE+", "+FuelColumns.ODO+") "+ "VALUES ('2', '"+ d.getTime()  +"', '132054');");
-        db.execSQL("INSERT INTO " + Fueling.TABLE_CONT + "("+FuelColumns.ID_AUTO + ", " +
-                FuelColumns.DATE+", "+FuelColumns.ODO+") "+ "VALUES ('2', '"+ d.getTime()  +"', '132162');");
-*/
         ContentValues values = new ContentValues();
         Resources res = fContext.getResources();
         XmlResourceParser xml = res.getXml(R.xml.fuel);

@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools" tools:context=".MainActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" app:showAsAction="never" />
-    <item android:id="@+id/test_xml" android:title="@string/test_xml"
+    <item android:id="@+id/addFuel" android:title="@string/addFuel"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/updateFuel" android:title="@string/updateFuel"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

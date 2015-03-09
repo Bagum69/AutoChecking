@@ -7,6 +7,7 @@ import db.DBTheme.Fueling.FuelColumns;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.SimpleCursorAdapter;
@@ -116,6 +117,37 @@ public class DBController {
         String selection = FuelColumns.ID_AUTO + " = '"+ id +"' ";
         final Cursor c = sqliteDB.query(Fueling.TABLE_CONT, null, selection, null, null, null,	Fueling.DEFAULT_SORT,  "20");
         adapter.changeCursor(c);
+    }
+
+    public static void addFuel(Fueling fueling) {
+        String quer = String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');",
+                // таблица
+                Fueling.TABLE_CONT,
+                // колонки
+                FuelColumns.ID_AUTO, FuelColumns.DATE, FuelColumns.ODO, FuelColumns.TRIP,FuelColumns.SUMMA,FuelColumns.LITR,
+                // поля
+                fueling.getId_auto(), fueling.getDate(), fueling.getOdo(), fueling.getTrip(), fueling.getSumma(), fueling.getLitres()
+        );
+        sqliteDB.execSQL(quer);
+    }
+
+    public static void updateFuel(Fueling fueling) {
+        String quer = String.format("update %s set %s='%s', %s='%s',"+
+                        " %s='%s', %s='%s', %s='%s', %s='%s'"+
+                        " where %s='%s'",
+                // таблица
+                Fueling.TABLE_CONT,
+                // колонки
+                FuelColumns.ID_AUTO, fueling.getId_auto(),
+                FuelColumns.DATE, fueling.getDate(),
+                FuelColumns.ODO, fueling.getOdo(),
+                FuelColumns.TRIP,fueling.getTrip(),
+                FuelColumns.SUMMA,fueling.getSumma(),
+                FuelColumns.LITR, fueling.getLitres(),
+                BaseColumns._ID, fueling.getId()
+
+        );
+        sqliteDB.execSQL(quer);
     }
 
 }
