@@ -5,10 +5,13 @@ package db;
  */
 
 import android.provider.BaseColumns;
+import android.text.format.DateFormat;
 
+import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class DBTheme {
     public static class Autos {
@@ -69,18 +72,36 @@ public class DBTheme {
         private Float price;
         private Float litres;
         private int type;
+        public static NumberFormat formatter;
 
         public Fueling() {
+            date = new Date();
+            formatter = NumberFormat.getNumberInstance(new Locale("ru", "RU"));
         }
 
         public long getId() {return this.id; }
         public long getId_auto() {return this.id_auto; }
         public Long getDate() {return this.date.getTime();  }
+        public String getDateString() {
+            DateFormat df = new DateFormat();
+            return df.format("dd.MM.yyyy", this.date).toString();
+        }
         public Long getOdo() { return odo;  }
+        public String getOdoString() { return formatter.format(odo);  }
         public Long getTrip() { return trip;  }
+        public String getTripString() { return formatter.format(trip);  }
         public Float getSumma() { return summa;  }
+        public String getSummaString() {
+            return formatter.format(summa);
+        }
         public Float getPrice() { return price;  }
+        public String getPriceString() {
+            return formatter.format(price);
+        }
         public Float getLitres() { return litres;  }
+        public String getLitresString() {
+            return formatter.format(litres);
+        }
         public void setId(long id) {
             this.id = id;
         }
@@ -88,7 +109,10 @@ public class DBTheme {
             this.id_auto = id_auto;
         }
         public void setDate(Long date) {
-            this.date.setTime(date);
+            if (date==0) {
+                this.date.getTime();
+            }
+            else this.date.setTime(date);
         }
         public void setDate(Date date) {
             this.date = date;
@@ -99,17 +123,57 @@ public class DBTheme {
         public void setOdo(Long odo) {
             this.odo = odo;
         }
+        public void setOdo(String odo) {
+            try {
+                this.odo = formatter.parse(odo).longValue();
+            }
+            catch (Exception e) {
+                this.odo = Long.valueOf(0);
+            }
+        }
         public void setTrip(Long trip) {
             this.trip = trip;
+        }
+        public void setTrip(String trip) {
+            try {
+                this.trip = formatter.parse(trip).longValue();
+            }
+            catch (Exception e) {
+                this.trip = Long.valueOf(0);
+            }
         }
         public void setSumma(Float summa) {
             this.summa = summa;
         }
+        public void setSumma(String summa) {
+            try {
+                this.summa = formatter.parse(summa).floatValue();
+            }
+            catch (Exception e) {
+                this.summa = Float.valueOf(0);
+            }
+        }
         public void setPrice(Float price) {
             this.price = price;
         }
+        public void setPrice(String price) {
+            try {
+                this.price = formatter.parse(price).floatValue();
+            }
+            catch (Exception e) {
+                this.price = Float.valueOf(0);
+            }
+        }
         public void setLitres(Float litres) {
             this.litres = litres;
+        }
+        public void setLitres(String litres) {
+            try {
+                this.litres = formatter.parse(litres).floatValue();
+            }
+            catch (Exception e) {
+                this.litres = Float.valueOf(0);
+            }
         }
         public int getType() {
             return type;

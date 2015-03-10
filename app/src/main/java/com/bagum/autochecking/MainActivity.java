@@ -16,10 +16,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 
+import java.util.Date;
 import java.util.List;
 import db.DBAdapter;
 import db.DBController;
@@ -69,6 +72,31 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         fv.setAdapter(adapterfuel);
         View v = getLayoutInflater().inflate(R.layout.row_fuel_header, null);
         fv.addHeaderView(v);
+
+        fv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                updateFueling();
+                return true;
+            }
+        });
+        fv.setLongClickable(true);
+        fv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Long click Item position:" + position + " id: " + id);
+                updateFueling();
+                return true;
+            }
+        });
+
+        ImageButton fvAdd = (ImageButton) findViewById(R.id.btn_add_fuel);
+        fvAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addFueling();
+            }
+        });
 
     }
 
@@ -132,38 +160,44 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             return true;
         }
         if (id == R.id.addFuel) {
-            Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
-            Cursor cursor = adapterfuel.getCursor();
-            Long pOdo = cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO));
-            Long pTrip = cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP));
-            intent.putExtra("_id", -1);
-            intent.putExtra("_prevOdo", pOdo);
-            intent.putExtra("_prevTrip", pTrip);
-            intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
-            startActivity(intent);
+            addFueling();
 
             return true;
         }
         if (id == R.id.updateFuel) {
-            Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
-            Cursor cursor = adapterfuel.getCursor();
-            Long pOdo = cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO));
-            Long pTrip = cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP));
-            Long fid = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
-            intent.putExtra("_id", fid);
-            intent.putExtra("_date", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.DATE)));
-            intent.putExtra("_prevOdo", pOdo);
-            intent.putExtra("_prevTrip", pTrip);
-            intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
-            intent.putExtra("_summa", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA)));
-            intent.putExtra("_litres", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR)));
-            startActivity(intent);
+            updateFueling();
 
             return true;
         }
 
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void addFueling() {
+        Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
+        Cursor cursor = adapterfuel.getCursor();
+        cursor.moveToFirst();// in first record placed last data
+        Date d = new Date();
+        intent.putExtra("_id", -1);
+        intent.putExtra("_date", d.getTime());
+        intent.putExtra("_prevOdo", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO)));
+        intent.putExtra("_prevTrip", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP)));
+        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
+        startActivity(intent);
+    }
+
+    private void updateFueling() {
+        Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
+        Cursor cursor = adapterfuel.getCursor();
+        intent.putExtra("_id", cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
+        intent.putExtra("_date", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.DATE)));
+        intent.putExtra("_prevOdo", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO)));
+        intent.putExtra("_prevTrip", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP)));
+        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
+        intent.putExtra("_summa", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA)));
+        intent.putExtra("_litres", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR)));
+        startActivity(intent);
     }
 
     @Override

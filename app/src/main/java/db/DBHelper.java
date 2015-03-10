@@ -29,7 +29,7 @@ import db.DBTheme.Fueling.FuelColumns;
  */
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "autocheck.db";
-    private static final int DATABASE_VERSION = 24;
+    private static final int DATABASE_VERSION = 25;
     private static final String DEBUG_TAG = DBHelper.class.getSimpleName();
     private static final boolean LOGV = true;
 

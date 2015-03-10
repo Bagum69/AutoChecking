@@ -11,15 +11,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 
-import java.text.NumberFormat;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
-
-import db.DBTheme;
+import db.DBTheme.Fueling;
 
 
 public class FuelEditorActivity extends ActionBarActivity {
@@ -30,14 +23,8 @@ public class FuelEditorActivity extends ActionBarActivity {
     EditText mSumma;
     EditText mPrice;
     EditText mLitres;
-    Long prevOdo;
-    Long prevTrip;
-    Long id_auto;
-    Long fid;
-    Long fdate;
-    Float fsumma;
-    Float fprice;
-    Float flitres;
+    EditText mDate;
+    Fueling fe;
 
 
     @Override
@@ -48,27 +35,39 @@ public class FuelEditorActivity extends ActionBarActivity {
         //d.setOnFocusChangeListener(new DatePickerClick(this, d));
         d.setOnClickListener(new DatePickerClick(this, d));
 
-        fid = getIntent().getLongExtra("_id", -1);
-        id_auto = getIntent().getLongExtra("_id_auto", 1);
+        fe = new Fueling();
+        fe.setId(getIntent().getLongExtra("_id", -1));
+        fe.setId_auto(getIntent().getLongExtra("_id_auto", 1));
+        fe.setDate(getIntent().getLongExtra("_date", 0));
 
+        fe.setSumma(getIntent().getFloatExtra("_summa", 0));
+        fe.setLitres(getIntent().getFloatExtra("_litres", 0));
+        if (fe.getLitres()>0) fe.setPrice(fe.getSumma()/fe.getLitres()); else fe.setPrice(Float.valueOf(0));
+
+        fe.setOdo(getIntent().getLongExtra("_prevOdo", 0));
+        fe.setTrip(getIntent().getLongExtra("_prevTrip", 0));
+
+        mDate = (EditText) findViewById(R.id.feDate);
+        mDate.setText(fe.getDateString());
 
         setupOdoTrip();
-
         setupSummaPrice();
+
+
 
         Button btn = (Button) findViewById(R.id.fe_btn_save);
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DBTheme.Fueling fueling = new DBTheme.Fueling();
-                fueling.setId(fid);
-                fueling.setId_auto(id_auto);
-                fueling.setDate(((EditText) findViewById(R.id.feDate)).getText().toString());
-                fueling.setOdo(stringToLong(mOdo.getText().toString()));
-                fueling.setTrip(stringToLong(mTrip.getText().toString()));
-                fueling.setSumma(stringToFloat(mSumma.getText().toString()));
-                fueling.setLitres(stringToFloat(mLitres.getText().toString()));
-                if (fid==-1) {
+                Fueling fueling = new Fueling();
+                fueling.setId(fe.getId());
+                fueling.setId_auto(fe.getId_auto());
+                fueling.setDate(mDate.getText().toString());
+                fueling.setOdo(mOdo.getText().toString());
+                fueling.setTrip(mTrip.getText().toString());
+                fueling.setSumma(mSumma.getText().toString());
+                fueling.setLitres(mLitres.getText().toString());
+                if (fe.getId()==-1) {
                     MainActivity.dbCont.addFuel(fueling);
                     MainActivity.dbCont.changeCursorFuel(MainActivity.adapterfuel, MainActivity.spinnerAutos.getSelectedItemId());
                 }
@@ -81,38 +80,15 @@ public class FuelEditorActivity extends ActionBarActivity {
         });
     }
 
-    Float stringToFloat(String s) {
-        try {
-            return Float.valueOf(s);
-        }
-        catch (Exception e) {
-            Log.d(TAG, "String to float error: "+ e.getMessage());
-            return Float.valueOf(0);
-        }
-    }
-
-    Long stringToLong(String s) {
-        try {
-            return Long.valueOf(s);
-        }
-        catch (Exception e) {
-            return Long.valueOf(0);
-        }
-    }
 
     private void setupSummaPrice() {
         mSumma = (EditText) findViewById(R.id.feSumma);
         mPrice = (EditText) findViewById(R.id.fePrice);
         mLitres = (EditText) findViewById(R.id.feLitres);
-        if (fid > 0) {
-            fsumma = getIntent().getFloatExtra("_summa", 0);
-            flitres = getIntent().getFloatExtra("_litres", 0);
-            NumberFormat formatter = NumberFormat.getNumberInstance(Locale.US);
-            mSumma.setText(formatter.format(fsumma));
-            if (flitres>0) {
-                mPrice.setText(formatter.format(fsumma / flitres));
-            }
-            mLitres.setText(formatter.format(flitres));
+        if (fe.getId() > 0) {
+            mSumma.setText(fe.getSummaString());
+            mPrice.setText(fe.getPriceString());
+            mLitres.setText(fe.getLitresString());
         }
 
         TextWatcher tw = (new TextWatcher() {
@@ -125,25 +101,25 @@ public class FuelEditorActivity extends ActionBarActivity {
             public void afterTextChanged(Editable s) {
                 if (mSumma.getText().hashCode() == s.hashCode()){
                     if (mSumma.isFocused()) {
-                        Float curSumma = stringToFloat(mSumma.getText().toString());
-                        Float curPrice = stringToFloat(mPrice.getText().toString());
-                        if (curPrice > 0) {
-                            Float curLitres = curSumma/curPrice;
+                        Fueling ff = new Fueling();
+                        ff.setSumma(mSumma.getText().toString());
+                        ff.setPrice(mPrice.getText().toString());
+                        if (ff.getPrice() > 0) {
+                            ff.setLitres(ff.getSumma()/ff.getPrice());
                             //mLitres.setText(String.format("%.2f", curLitres));
-                            NumberFormat formatter = NumberFormat.getNumberInstance(Locale.US);
-                            mLitres.setText(formatter.format(curLitres));
-
+                            mLitres.setText(ff.getLitresString());
                         }
                     }
                 } else
                 if (mPrice.getText().hashCode() == s.hashCode()) {
                     if (mPrice.isFocused()) {
-                        Float curSumma = stringToFloat(mSumma.getText().toString());
-                        Float curPrice = stringToFloat(mPrice.getText().toString());
-                        if (curPrice > 0) {
-                            Float curLitres = curSumma/curPrice;
-                            NumberFormat formatter = NumberFormat.getNumberInstance(Locale.US);
-                            mLitres.setText(formatter.format(curLitres));
+                        Fueling ff = new Fueling();
+                        ff.setSumma(mSumma.getText().toString());
+                        ff.setPrice(mPrice.getText().toString());
+                        if (ff.getPrice() > 0) {
+                            ff.setLitres(ff.getSumma()/ff.getPrice());
+                            //mLitres.setText(String.format("%.2f", curLitres));
+                            mLitres.setText(ff.getLitresString());
                         }
                     }
                 }
@@ -155,14 +131,12 @@ public class FuelEditorActivity extends ActionBarActivity {
     }
 
     private void setupOdoTrip() {
-        prevOdo = getIntent().getLongExtra("_prevOdo", 0);
-        prevTrip = getIntent().getLongExtra("_prevTrip", 0);
 
         mOdo = (EditText) findViewById(R.id.feOdo);
         mTrip = (EditText) findViewById(R.id.feTrip);
-        if (fid > 0) {
-            mOdo.setText(prevOdo.toString());
-            mTrip.setText(prevTrip.toString());
+        if (fe.getId() > 0) {
+            mOdo.setText(fe.getOdoString());
+            mTrip.setText(fe.getTripString());
         }
 
 
@@ -176,19 +150,21 @@ public class FuelEditorActivity extends ActionBarActivity {
             public void afterTextChanged(Editable s) {
                 if (mOdo.getText().hashCode() == s.hashCode()){
                     if (mOdo.isFocused()) {
-                        String ss = mOdo.getText().toString();
-                        if (ss != "") {
-                            Long curTrip = Long.valueOf(ss) - prevOdo;
-                            if (curTrip > 0) mTrip.setText(curTrip.toString());
+                        Fueling ff = new Fueling();
+                        ff.setOdo(mOdo.getText().toString());
+                        if (ff.getOdo()>0) {
+                            ff.setTrip(ff.getOdo()-fe.getOdo()); // curent ODO(ff) minus previos ODO(fe)
+                            if (ff.getTrip()>0) mTrip.setText(ff.getTripString());
                         }
                     }
                 } else
                 if (mTrip.getText().hashCode() == s.hashCode()) {
                     if (mTrip.isFocused()) {
-                        String ss = mTrip.getText().toString();
-                        if (ss != "") {
-                            Long curOdo = prevOdo + Long.valueOf(ss);
-                            if (curOdo > 0) mOdo.setText(curOdo.toString());
+                        Fueling ff = new Fueling();
+                        ff.setTrip(mTrip.getText().toString());
+                        if (ff.getTrip()>0) {
+                            ff.setOdo(fe.getOdo()+ff.getTrip()); //  prev ODO(fe) plus new Trip(ff)
+                            if (ff.getOdo() > 0) mOdo.setText(ff.getOdoString());
                         }
                     }
                 }
@@ -222,4 +198,24 @@ public class FuelEditorActivity extends ActionBarActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    Float stringToFloat(String s) {
+        try {
+            return Float.valueOf(s);
+        }
+        catch (Exception e) {
+            Log.d(TAG, "String to float error: "+ e.getMessage());
+            return Float.valueOf(0);
+        }
+    }
+
+    Long stringToLong(String s) {
+        try {
+            return Long.valueOf(s);
+        }
+        catch (Exception e) {
+            return Long.valueOf(0);
+        }
+    }
+
 }
