@@ -777,4 +777,12 @@
 		<summa>1500</summa>
 		<litr>51.9031141868512</litr>
 	</record>
+    <record>
+        <date>06.03.2015</date>
+        <odo>185285</odo>
+        <trip>555</trip>
+        <summa>1000</summa>
+        <litr>34.602</litr>
+    </record>
+
 </data-set>

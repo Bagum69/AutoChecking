@@ -4,6 +4,7 @@ import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.support.v4.view.MenuItemCompat;
@@ -40,19 +41,25 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     public static DBAdapter adapterfuel = null;
     public static ListView fv = null;
     public static Spinner spinnerAutos = null;
+    public static final String PREFS_NAME = "AutoPrefsFile";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dbCont = new DBController(getBaseContext());
+        // Read preferences
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        Long id_auto = settings.getLong("id_auto", -1);
 
+
+        dbCont = new DBController(getBaseContext());
         adapter = dbCont.getAdapter(getBaseContext());
 
+        //For Searching
         handleIntent(getIntent());
 
-
+        // Make Spinner for select autos
         adapterSpin = dbCont.getAdapterSpin2(getBaseContext());
         spinnerAutos = (Spinner) findViewById(R.id.spinner);
         spinnerAutos.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -63,9 +70,10 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
         });
         spinnerAutos.setAdapter(adapterSpin);
+        // restore postion spinner
+        if (id_auto != -1)  SelectSpinnerItemByValue(spinnerAutos, id_auto);
 
-
-
+        // Setup listView for fueling
         fv = (ListView) findViewById(R.id.flist);
         adapterfuel = dbCont.getAdapterFuel(getBaseContext());
         dbCont.changeCursorFuel(adapterfuel, fv.getSelectedItemId());
@@ -73,13 +81,6 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         View v = getLayoutInflater().inflate(R.layout.row_fuel_header, null);
         fv.addHeaderView(v);
 
-        fv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                updateFueling();
-                return true;
-            }
-        });
         fv.setLongClickable(true);
         fv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
@@ -133,6 +134,21 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
 
 
         return true;
+    }
+
+    @Override
+    protected void onStop () {
+        super.onStop();
+
+        // We need an Editor object to make preference changes.
+        // All objects are from android.context.Context
+        Cursor cursor = adapterSpin.getCursor();
+        Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong("id_auto", id_auto);
+        // Commit the edits!
+        editor.commit();
     }
 
     private void setupSearchView() {
@@ -198,6 +214,19 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         intent.putExtra("_summa", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA)));
         intent.putExtra("_litres", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR)));
         startActivity(intent);
+    }
+
+    public static void SelectSpinnerItemByValue(Spinner spnr, long value)
+    {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
+        for (int position = 0; position < adapter.getCount(); position++)
+        {
+            if(adapter.getItemId(position) == value)
+            {
+                spnr.setSelection(position);
+                return;
+            }
+        }
     }
 
     @Override

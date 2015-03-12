@@ -29,7 +29,7 @@ import db.DBTheme.Fueling.FuelColumns;
  */
 public class DBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "autocheck.db";
-    private static final int DATABASE_VERSION = 25;
+    private static final int DATABASE_VERSION = 27;
     private static final String DEBUG_TAG = DBHelper.class.getSimpleName();
     private static final boolean LOGV = true;
 
@@ -143,6 +143,12 @@ public class DBHelper extends SQLiteOpenHelper {
             xml.close();
         }
 
+        db.execSQL("CREATE TABLE " + DBTheme.Photos.TABLE_NAME + " (" + BaseColumns._ID
+                        + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
+                        + DBTheme.Photos.PhotosColumns.ID_F + " INTEGER NOT NULL, "
+                        + DBTheme.Photos.PhotosColumns.NAME + " TEXT NOT NULL );"
+        );
+
     }
 
     @Override
@@ -158,6 +164,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         db.execSQL("DROP TABLE IF EXISTS " + Autos.TABLE_CONT);
         db.execSQL("DROP TABLE IF EXISTS " + Fueling.TABLE_CONT);
+        db.execSQL("DROP TABLE IF EXISTS " + DBTheme.Photos.TABLE_NAME);
     }
 
 }

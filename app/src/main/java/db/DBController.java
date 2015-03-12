@@ -4,6 +4,10 @@ import db.DBTheme.Autos;
 import db.DBTheme.Autos.AutosColumns;
 import db.DBTheme.Fueling;
 import db.DBTheme.Fueling.FuelColumns;
+import db.DBTheme.Photos;
+import db.DBTheme.Photos.PhotosColumns;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -119,16 +123,23 @@ public class DBController {
         adapter.changeCursor(c);
     }
 
-    public static void addFuel(Fueling fueling) {
+    public static long addFuel(Fueling fueling) {
+        ContentValues values = new ContentValues();
+        values.put(FuelColumns.ID_AUTO, fueling.getId_auto());
+        values.put(FuelColumns.DATE,    fueling.getDate());
+        values.put(FuelColumns.ODO,     fueling.getOdo());
+        values.put(FuelColumns.TRIP,    fueling.getTrip());
+        values.put(FuelColumns.SUMMA,   fueling.getSumma());
+        values.put(FuelColumns.LITR,    fueling.getLitres());
+        return sqliteDB.insert(Fueling.TABLE_CONT, null, values);
+        /*
         String quer = String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');",
-                // таблица
-                Fueling.TABLE_CONT,
-                // колонки
-                FuelColumns.ID_AUTO, FuelColumns.DATE, FuelColumns.ODO, FuelColumns.TRIP,FuelColumns.SUMMA,FuelColumns.LITR,
-                // поля
-                fueling.getId_auto(), fueling.getDate(), fueling.getOdo(), fueling.getTrip(), fueling.getSumma(), fueling.getLitres()
-        );
+                 Fueling.TABLE_CONT,// таблица
+                FuelColumns.ID_AUTO, FuelColumns.DATE, FuelColumns.ODO, FuelColumns.TRIP,FuelColumns.SUMMA,FuelColumns.LITR,// колонки
+                fueling.getId_auto(), fueling.getDate(), fueling.getOdo(), fueling.getTrip(), fueling.getSumma(), fueling.getLitres()// поля
+         );
         sqliteDB.execSQL(quer);
+        */
     }
 
     public static void updateFuel(Fueling fueling) {
@@ -148,6 +159,39 @@ public class DBController {
 
         );
         sqliteDB.execSQL(quer);
+    }
+
+    public static void addPhoto(Long id_event, String name) {
+        String quer = String.format("INSERT INTO %s (%s, %s) VALUES ('%s', '%s');",
+                Photos.TABLE_NAME,  PhotosColumns.ID_F, PhotosColumns.NAME, id_event, name
+        );
+        sqliteDB.execSQL(quer);
+    }
+
+    public static void delAllPhotos(Long id_event) {
+        String quer = String.format("DELETE FROM %s WHERE %s='%s'",
+                Photos.TABLE_NAME,  PhotosColumns.ID_F, id_event
+        );
+        sqliteDB.execSQL(quer);
+    }
+
+    public static ArrayList<String> getPhotosList(Long idEvent) {
+        ArrayList<String> list = new ArrayList<String>();
+        try {
+            final Cursor c = sqliteDB.query(Photos.TABLE_NAME, null, " "+PhotosColumns.ID_F+"='"+idEvent+"' ", null, null, null, Photos.DEFAULT_SORT);
+            if (c.moveToFirst()) {
+                do {
+                    String ID = c.getString(0);
+                    String ID_F = c.getString(1);
+                    String NAME = c.getString(2);
+                    list.add(NAME);
+                } while (c.moveToNext());
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to select Photos.", e);
+        }
+        return list;
     }
 
 }
