@@ -4,7 +4,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.bagum.autochecking.FuelEditorActivity"
+    tools:context="com.bagum.autochecking.OperationEditorActivity"
     android:orientation="vertical">
 
 <LinearLayout
@@ -88,7 +88,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/feLabelLitres"
+                android:text="@string/feLabelQty"
                 android:id="@+id/textView8" />
 
             <EditText
@@ -96,7 +96,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="numberDecimal"
                 android:ems="10"
-                android:id="@+id/feLitres" />
+                android:id="@+id/feQty" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -107,6 +107,7 @@
                 <requestFocus/>
             </Button>
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/fe_left_column"
             android:layout_height="match_parent"
@@ -117,7 +118,6 @@
 
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/fe_left_column"
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"

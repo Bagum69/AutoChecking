@@ -2,8 +2,8 @@ package db;
 
 import db.DBTheme.Autos;
 import db.DBTheme.Autos.AutosColumns;
-import db.DBTheme.Fueling;
-import db.DBTheme.Fueling.FuelColumns;
+import db.DBTheme.Operation;
+import db.DBTheme.Operation.OperationColumns;
 import db.DBTheme.Photos;
 import db.DBTheme.Photos.PhotosColumns;
 
@@ -48,7 +48,7 @@ public class DBController {
         final String[] from = {AutosColumns._ID, AutosColumns.MARK, AutosColumns.MODEL};
         final int[] to = new int[] { R.id.id, R.id.mark, R.id.model };
 
-        final Cursor c = sqliteDB.query(Autos.TABLE_CONT, null, null, null, null, null,	Autos.DEFAULT_SORT);
+        final Cursor c = sqliteDB.query(Autos.TABLE, null, null, null, null, null,	Autos.DEFAULT_SORT);
         final SimpleCursorAdapter adapter = new SimpleCursorAdapter(context, R.layout.row_auto,	c, from, to);
 
         return adapter;
@@ -60,8 +60,8 @@ public class DBController {
         final String[] from = {"MARK_MODEL"};
         final int[] to = new int[] { android.R.id.text1 };
 
-        //final Cursor c = sqliteDB.query(Autos.TABLE_CONT, null, null, null, null, null,	Autos.DEFAULT_SORT);
-        final Cursor c = sqliteDB.rawQuery("SELECT _id, (MARK || ' ' || MODEL) as  MARK_MODEL from " +Autos.TABLE_CONT+ "", null);
+        //final Cursor c = sqliteDB.query(Autos.TABLE, null, null, null, null, null,	Autos.DEFAULT_SORT);
+        final Cursor c = sqliteDB.rawQuery("SELECT _id, (MARK || ' ' || MODEL) as  MARK_MODEL from " +Autos.TABLE+ "", null);
         final SimpleCursorAdapter adapter = new SimpleCursorAdapter(context, android.R.layout.simple_spinner_item,	c, from, to);
         adapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item );
 
@@ -76,7 +76,7 @@ public class DBController {
             final String[] from = {AutosColumns._ID, AutosColumns.MARK, AutosColumns.MODEL};
             final int[] to = new int[] { R.id.id, R.id.mark, R.id.model };
 
-            final Cursor c = sqliteDB.query(Autos.TABLE_CONT, null, null, null, null, null,	Autos.DEFAULT_SORT);
+            final Cursor c = sqliteDB.query(Autos.TABLE, null, null, null, null, null,	Autos.DEFAULT_SORT);
             if (c.moveToFirst()) {
                 do {
 
@@ -100,63 +100,63 @@ public class DBController {
         //DBHelper dbhelper = new DBHelper(context);
         //SQLiteDatabase sqliteDB = dbhelper.getReadableDatabase();
         String selection = AutosColumns.MARK + " like '"+newText+"%' or "+AutosColumns.MODEL+" like '"+newText+"%' ";
-        final Cursor c = sqliteDB.query(Autos.TABLE_CONT, null, selection, null, null, null,	Autos.DEFAULT_SORT);
+        final Cursor c = sqliteDB.query(Autos.TABLE, null, selection, null, null, null,	Autos.DEFAULT_SORT);
         adapter.changeCursor(c);
     }
 
-    public static DBAdapter getAdapterFuel(Context context) {
+    public static DBAdapter getAdapterOperation(Context context) {
         //DBHelper dbhelper = new DBHelper(context);
         //SQLiteDatabase sqliteDB = dbhelper.getReadableDatabase();
-        final String[] from = { FuelColumns.DATE, FuelColumns.ODO, FuelColumns.TRIP, FuelColumns.SUMMA};
+        final String[] from = { OperationColumns.DATE, OperationColumns.ODO, OperationColumns.TRIP, OperationColumns.SUMMA};
         final int[] to = new int[] { R.id.date, R.id.odo, R.id.trip, R.id.summa };
 
-        final Cursor c = sqliteDB.query(Fueling.TABLE_CONT, null, null, null, null, null,	Fueling.DEFAULT_SORT, "20");
+        final Cursor c = sqliteDB.query(Operation.TABLE, null, null, null, null, null,	Operation.DEFAULT_SORT, "20");
         final DBAdapter adapter = new DBAdapter(context, R.layout.row_fuel,	c, from, to);
 
         return adapter;
     }
 
-    public static void changeCursorFuel(SimpleCursorAdapter adapter, Long id) {
+    public static void changeCursorOperation(SimpleCursorAdapter adapter, Long id) {
         //DBHelper dbhelper = new DBHelper(context);
         //SQLiteDatabase sqliteDB = dbhelper.getReadableDatabase();
-        String selection = FuelColumns.ID_AUTO + " = '"+ id +"' ";
-        final Cursor c = sqliteDB.query(Fueling.TABLE_CONT, null, selection, null, null, null,	Fueling.DEFAULT_SORT,  "20");
+        String selection = OperationColumns.ID_AUTO + " = '"+ id +"' ";
+        final Cursor c = sqliteDB.query(Operation.TABLE, null, selection, null, null, null,	Operation.DEFAULT_SORT,  "20");
         adapter.changeCursor(c);
     }
 
-    public static long addFuel(Fueling fueling) {
+    public static long addOperation(Operation Operation) {
         ContentValues values = new ContentValues();
-        values.put(FuelColumns.ID_AUTO, fueling.getId_auto());
-        values.put(FuelColumns.DATE,    fueling.getDate());
-        values.put(FuelColumns.ODO,     fueling.getOdo());
-        values.put(FuelColumns.TRIP,    fueling.getTrip());
-        values.put(FuelColumns.SUMMA,   fueling.getSumma());
-        values.put(FuelColumns.LITR,    fueling.getLitres());
-        return sqliteDB.insert(Fueling.TABLE_CONT, null, values);
+        values.put(OperationColumns.ID_AUTO, Operation.getId_auto());
+        values.put(OperationColumns.DATE,    Operation.getDate());
+        values.put(OperationColumns.ODO,     Operation.getOdo());
+        values.put(OperationColumns.TRIP,    Operation.getTrip());
+        values.put(OperationColumns.SUMMA,   Operation.getSumma());
+        values.put(OperationColumns.QTY,    Operation.getQty());
+        return sqliteDB.insert(Operation.TABLE, null, values);
         /*
         String quer = String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');",
-                 Fueling.TABLE_CONT,// таблица
-                FuelColumns.ID_AUTO, FuelColumns.DATE, FuelColumns.ODO, FuelColumns.TRIP,FuelColumns.SUMMA,FuelColumns.LITR,// колонки
-                fueling.getId_auto(), fueling.getDate(), fueling.getOdo(), fueling.getTrip(), fueling.getSumma(), fueling.getLitres()// поля
+                 Operation.TABLE,// таблица
+                OperationColumns.ID_AUTO, OperationColumns.DATE, OperationColumns.ODO, OperationColumns.TRIP,OperationColumns.SUMMA,OperationColumns.LITR,// колонки
+                Operation.getId_auto(), Operation.getDate(), Operation.getOdo(), Operation.getTrip(), Operation.getSumma(), Operation.getLitres()// поля
          );
         sqliteDB.execSQL(quer);
         */
     }
 
-    public static void updateFuel(Fueling fueling) {
+    public static void updateOperation(Operation Operation) {
         String quer = String.format("update %s set %s='%s', %s='%s',"+
                         " %s='%s', %s='%s', %s='%s', %s='%s'"+
                         " where %s='%s'",
                 // таблица
-                Fueling.TABLE_CONT,
+                Operation.TABLE,
                 // колонки
-                FuelColumns.ID_AUTO, fueling.getId_auto(),
-                FuelColumns.DATE, fueling.getDate(),
-                FuelColumns.ODO, fueling.getOdo(),
-                FuelColumns.TRIP,fueling.getTrip(),
-                FuelColumns.SUMMA,fueling.getSumma(),
-                FuelColumns.LITR, fueling.getLitres(),
-                BaseColumns._ID, fueling.getId()
+                OperationColumns.ID_AUTO, Operation.getId_auto(),
+                OperationColumns.DATE, Operation.getDate(),
+                OperationColumns.ODO, Operation.getOdo(),
+                OperationColumns.TRIP,Operation.getTrip(),
+                OperationColumns.SUMMA,Operation.getSumma(),
+                OperationColumns.QTY, Operation.getQty(),
+                BaseColumns._ID, Operation.getId()
 
         );
         sqliteDB.execSQL(quer);
@@ -164,14 +164,14 @@ public class DBController {
 
     public static void addPhoto(Long id_event, String name) {
         String quer = String.format("INSERT INTO %s (%s, %s) VALUES ('%s', '%s');",
-                Photos.TABLE_NAME,  PhotosColumns.ID_F, PhotosColumns.NAME, id_event, name
+                Photos.TABLE,  PhotosColumns.ID_F, PhotosColumns.NAME, id_event, name
         );
         sqliteDB.execSQL(quer);
     }
 
     public static void delAllPhotos(Long id_event) {
         String quer = String.format("DELETE FROM %s WHERE %s='%s'",
-                Photos.TABLE_NAME,  PhotosColumns.ID_F, id_event
+                Photos.TABLE,  PhotosColumns.ID_F, id_event
         );
         sqliteDB.execSQL(quer);
     }
@@ -179,7 +179,7 @@ public class DBController {
     public static ArrayList<String> getPhotosList(Long idEvent) {
         ArrayList<String> list = new ArrayList<String>();
         try {
-            final Cursor c = sqliteDB.query(Photos.TABLE_NAME, null, " "+PhotosColumns.ID_F+"='"+idEvent+"' ", null, null, null, Photos.DEFAULT_SORT);
+            final Cursor c = sqliteDB.query(Photos.TABLE, null, " "+PhotosColumns.ID_F+"='"+idEvent+"' ", null, null, null, Photos.DEFAULT_SORT);
             if (c.moveToFirst()) {
                 do {
                     String ID = c.getString(0);
@@ -197,14 +197,14 @@ public class DBController {
 
     public static void delPhoto(long id) {
         String quer = String.format("DELETE FROM %s WHERE %s='%s'",
-                Photos.TABLE_NAME,  BaseColumns._ID, id
+                Photos.TABLE,  BaseColumns._ID, id
         );
         sqliteDB.execSQL(quer);
     }
 
     public static void integrityCheck() {
         try {
-            final Cursor c = sqliteDB.query(Photos.TABLE_NAME, null, null, null, null, null, Photos.DEFAULT_SORT);
+            final Cursor c = sqliteDB.query(Photos.TABLE, null, null, null, null, null, Photos.DEFAULT_SORT);
             if (c.moveToFirst()) {
                 do {
                     long id = c.getLong(0);

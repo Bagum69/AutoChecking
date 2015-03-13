@@ -21,17 +21,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import db.DBTheme.Autos;
-import db.DBTheme.Fueling;
-import db.DBTheme.Fueling.FuelColumns;
+import db.DBTheme.Operation;
+import db.DBTheme.Operation.OperationColumns;
 
 /**
  * Created by tabunshikov.vadim on 03.03.2015.
  */
 public class DBHelper extends SQLiteOpenHelper {
+    private static final String TAG = DBAdapter.class.getSimpleName();
     private static final String DATABASE_NAME = "autocheck.db";
-    private static final int DATABASE_VERSION = 27;
+    private static final int DATABASE_VERSION = 29;
     private static final String DEBUG_TAG = DBHelper.class.getSimpleName();
     private static final boolean LOGV = true;
+    public static final int OPR_STATE_INCOMPLETE = 0;
+    public static final int OPR_STATE_COMPLETE = 5;
+    public static final int OPR_TYPE_FUEL = 1;
 
     private final Context fContext;
 
@@ -56,24 +60,27 @@ public class DBHelper extends SQLiteOpenHelper {
             Log.d(DEBUG_TAG, "onCreate()");
         }
 
-        db.execSQL("CREATE TABLE " + Autos.TABLE_CONT + " (" + BaseColumns._ID
+        db.execSQL("CREATE TABLE " + Autos.TABLE + " (" + BaseColumns._ID
                         + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
                         + Autos.AutosColumns.MARK + " TEXT NOT NULL, "
                         + Autos.AutosColumns.MODEL + " TEXT NOT NULL );"
         );
 
-        db.execSQL("INSERT INTO " + Autos.TABLE_CONT + "("+Autos.AutosColumns.MARK+", "+Autos.AutosColumns.MODEL+") "+ "VALUES ('Toyota', 'LandCruiser');");
-        db.execSQL("INSERT INTO " + Autos.TABLE_CONT + "("+Autos.AutosColumns.MARK+", "+Autos.AutosColumns.MODEL+") "+ "VALUES ('Toyota', 'FunCargo');");
+        db.execSQL("INSERT INTO " + Autos.TABLE + "("+Autos.AutosColumns.MARK+", "+Autos.AutosColumns.MODEL+") "+ "VALUES ('Toyota', 'LandCruiser');");
+        db.execSQL("INSERT INTO " + Autos.TABLE + "("+Autos.AutosColumns.MARK+", "+Autos.AutosColumns.MODEL+") "+ "VALUES ('Toyota', 'FunCargo');");
 
 
-        db.execSQL("CREATE TABLE " + Fueling.TABLE_CONT + " (" + BaseColumns._ID
+        db.execSQL("CREATE TABLE " + Operation.TABLE + " (" + BaseColumns._ID
                 + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
-                + FuelColumns.ID_AUTO+ " INTEGER NOT NULL, "
-                + FuelColumns.DATE+ " INTEGER NOT NULL, "
-                + FuelColumns.ODO + " INTEGER NOT NULL, "
-                + FuelColumns.TRIP + " INTEGER NOT NULL, "
-                + FuelColumns.SUMMA+ " REAL NOT NULL, "
-                + FuelColumns.LITR+ " REAL NOT NULL "
+                + OperationColumns.ID_AUTO+ " INTEGER NOT NULL, "
+                + OperationColumns.DATE+ " INTEGER NOT NULL, "
+                + OperationColumns.ODO + " REAL NOT NULL, "
+                + OperationColumns.TRIP + " REAL NOT NULL, "
+                + OperationColumns.SUMMA+ " REAL NOT NULL, "
+                + OperationColumns.PRICE+ " REAL NOT NULL, "
+                + OperationColumns.QTY+ " REAL NOT NULL, "
+                + OperationColumns.TYPE+ " INTEGER NOT NULL, "
+                + OperationColumns.STATE+ " INTEGER NOT NULL "
                 +");" );
 
         ContentValues values = new ContentValues();
@@ -93,7 +100,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 }
                 if ((eventType == XmlPullParser.END_TAG) && (xml.getName().equals("record"))) {
                     values.put("id_auto", 2);
-                    db.insert(DBTheme.Fueling.TABLE_CONT, null, values); //write dto db
+                    values.put("type", OPR_TYPE_FUEL);
+                    values.put("state", OPR_STATE_COMPLETE);
+                    db.insert(DBTheme.Operation.TABLE, null, values); //write dto db
                     startRec = false;
                 }
 
@@ -117,9 +126,13 @@ public class DBHelper extends SQLiteOpenHelper {
                         eventType = xml.next();
                         values.put("summa", xml.getText());
                     }
-                    if ((eventType == XmlPullParser.START_TAG) && (xml.getName().equals("litr"))) {
+                    if ((eventType == XmlPullParser.START_TAG) && (xml.getName().equals("qty"))) {
                         eventType = xml.next();
-                        values.put("litr", xml.getText());
+                        values.put("qty", xml.getText());
+                    }
+                    if ((eventType == XmlPullParser.START_TAG) && (xml.getName().equals("pr"))) {
+                        eventType = xml.next();
+                        values.put("pr", xml.getText());
                     }
                     /*
                     String title = xml.getAttributeValue(0);
@@ -134,16 +147,16 @@ public class DBHelper extends SQLiteOpenHelper {
         }
         // Catch errors
         catch (XmlPullParserException e) {
-            Log.e("Test", e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
         } catch (IOException e) {
-            Log.e("Test", e.getMessage(), e);
+            Log.e(TAG, e.getMessage(), e);
 
         } finally {
             // Close the xml file
             xml.close();
         }
 
-        db.execSQL("CREATE TABLE " + DBTheme.Photos.TABLE_NAME + " (" + BaseColumns._ID
+        db.execSQL("CREATE TABLE " + DBTheme.Photos.TABLE + " (" + BaseColumns._ID
                         + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
                         + DBTheme.Photos.PhotosColumns.ID_F + " INTEGER NOT NULL, "
                         + DBTheme.Photos.PhotosColumns.NAME + " TEXT NOT NULL );"
@@ -162,9 +175,9 @@ public class DBHelper extends SQLiteOpenHelper {
         if (LOGV) {
             Log.d(DEBUG_TAG, "onDropTables called");
         }
-        db.execSQL("DROP TABLE IF EXISTS " + Autos.TABLE_CONT);
-        db.execSQL("DROP TABLE IF EXISTS " + Fueling.TABLE_CONT);
-        db.execSQL("DROP TABLE IF EXISTS " + DBTheme.Photos.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + Autos.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + Operation.TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + DBTheme.Photos.TABLE);
     }
 
 }

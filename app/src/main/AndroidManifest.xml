@@ -26,7 +26,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".FuelEditorActivity"
+            android:name=".OperationEditorActivity"
             android:label="@string/title_activity_fuel_editor" >
         </activity>
     </application>

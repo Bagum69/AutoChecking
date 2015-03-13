@@ -30,31 +30,31 @@ public class DBAdapter extends SimpleCursorAdapter {
         TextView e  = (TextView)view.findViewById(R.id.date);
         if (e != null) {
             Date d = new Date();
-            //Log.d(TAG, "Date = " + cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.DATE)));
-            d.setTime(cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.DATE)));
+            //Log.d(TAG, "Date = " + cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.DATE)));
+            d.setTime(cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.DATE)));
             e.setText(DateFormat.format("dd.MM.yyyy", d));
         }
 
         TextView odo  = (TextView)view.findViewById(R.id.odo);
         if (odo != null) {
-            odo.setText(String.format("%,d", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO))));
+            odo.setText(String.format("%,d", cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.ODO))));
         }
 
         TextView summa = (TextView)view.findViewById(R.id.summa);
         if (summa != null) {
-            summa.setText(String.format("%.2f", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA))));
+            summa.setText(String.format("%.2f", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.SUMMA))));
         }
 
         TextView litr = (TextView)view.findViewById(R.id.litr);
         if (litr != null) {
-            litr.setText(String.format("%.1f", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR))));
+            litr.setText(String.format("%.1f", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.QTY))));
         }
 
         TextView price = (TextView)view.findViewById(R.id.price);
         if (price != null) {
             price.setText(String.format("%.2f",
-                    cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA))/
-                            cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR))));
+                    cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.SUMMA))/
+                            cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.QTY))));
         }
 
     }

@@ -16,7 +16,7 @@ import java.util.Locale;
 public class DBTheme {
     public static class Autos {
         public static final String DEFAULT_SORT = AutosColumns.MARK + " DESC";
-        public static final String TABLE_CONT = "Autos"; //имя таблицы
+        public static final String TABLE = "Autos"; //имя таблицы
         private long id; //наш айдишник
         private String mark; //поле имя
         private String model; //фамилия
@@ -66,24 +66,34 @@ public class DBTheme {
     }
 
 
-    public static class Fueling {
-        public static final String DEFAULT_SORT = FuelColumns.DATE + " DESC";
-        public static final String TABLE_CONT = "Fueling"; //имя таблицы
+    public static class Operation {
+        public static final String DEFAULT_SORT = OperationColumns.DATE + " DESC";
+        public static final String TABLE = "Operation"; //имя таблицы
         private long id; //наш айдишник
         private long id_auto;
         private Date date;
-        private Long odo;
-        private Long trip;
+        private Float odo;
+        private Float trip;
         private Float summa;
         private Float price;
-        private Float litres;
+        private Float qty;
         private int type;
+        private int state;
         public static NumberFormat formatter;
 
-        public Fueling() {
+        public Operation() {
             date = new Date();
             formatter = NumberFormat.getNumberInstance(new Locale("ru", "RU"));
         }
+
+        public int getState() {
+            return state;
+        }
+
+        public void setState(int state) {
+            this.state = state;
+        }
+
 
         public long getId() {
             return this.id;
@@ -102,7 +112,7 @@ public class DBTheme {
             return df.format("dd.MM.yyyy", this.date).toString();
         }
 
-        public Long getOdo() {
+        public Float getOdo() {
             return odo;
         }
 
@@ -110,7 +120,7 @@ public class DBTheme {
             return formatter.format(odo);
         }
 
-        public Long getTrip() {
+        public Float getTrip() {
             return trip;
         }
 
@@ -134,12 +144,12 @@ public class DBTheme {
             return formatter.format(price);
         }
 
-        public Float getLitres() {
-            return litres;
+        public Float getQty() {
+            return qty;
         }
 
-        public String getLitresString() {
-            return formatter.format(litres);
+        public String getQtyString() {
+            return formatter.format(qty);
         }
 
         public void setId(long id) {
@@ -164,27 +174,27 @@ public class DBTheme {
             this.date = stringToDate(date, "dd.MM.yyyy");
         }
 
-        public void setOdo(Long odo) {
+        public void setOdo(Float odo) {
             this.odo = odo;
         }
 
         public void setOdo(String odo) {
             try {
-                this.odo = formatter.parse(odo).longValue();
+                this.odo = formatter.parse(odo).floatValue();
             } catch (Exception e) {
-                this.odo = Long.valueOf(0);
+                this.odo = Float.valueOf(0);
             }
         }
 
-        public void setTrip(Long trip) {
+        public void setTrip(Float trip) {
             this.trip = trip;
         }
 
         public void setTrip(String trip) {
             try {
-                this.trip = formatter.parse(trip).longValue();
+                this.trip = formatter.parse(trip).floatValue();
             } catch (Exception e) {
-                this.trip = Long.valueOf(0);
+                this.trip = Float.valueOf(0);
             }
         }
 
@@ -212,15 +222,15 @@ public class DBTheme {
             }
         }
 
-        public void setLitres(Float litres) {
-            this.litres = litres;
+        public void setQty(Float qty) {
+            this.qty = qty;
         }
 
-        public void setLitres(String litres) {
+        public void setQty(String litres) {
             try {
-                this.litres = formatter.parse(litres).floatValue();
+                this.qty = formatter.parse(litres).floatValue();
             } catch (Exception e) {
-                this.litres = Float.valueOf(0);
+                this.qty = Float.valueOf(0);
             }
         }
 
@@ -233,21 +243,22 @@ public class DBTheme {
         }
 
 
-        public class FuelColumns implements BaseColumns {
+        public class OperationColumns implements BaseColumns {
             public static final String ID_AUTO = "id_auto";
             public static final String DATE = "date";
             public static final String ODO = "odo";
             public static final String TRIP = "trip";
             public static final String SUMMA = "summa";
-            public static final String PRICE = "price";
-            public static final String LITR = "litr";
+            public static final String PRICE = "pr";
+            public static final String QTY = "qty";
             public static final String TYPE = "type";
+            public static final String STATE = "state";
         }
     }
 
     public static class Photos {
         public static final String DEFAULT_SORT = PhotosColumns.NAME + " DESC";
-        public static final String TABLE_NAME = "Photos"; //имя таблицы
+        public static final String TABLE = "Photos"; //имя таблицы
 
         public void setId_f(Long id_f) {
             this.id_f = id_f;

@@ -21,5 +21,6 @@
     <string name="feBtnUpdate">Update</string>
     <string name="makePhoto">Make photo</string>
     <string name="clearPhoto">Clear all photos</string>
+    <string name="feLabelQty">Qty</string>
 
 </resources>

@@ -38,7 +38,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
     public static DBController dbCont = null;
     public static SimpleCursorAdapter adapter = null;
     public static SimpleCursorAdapter adapterSpin = null;
-    public static DBAdapter adapterfuel = null;
+    public static DBAdapter adapterOperation = null;
     public static ListView fv = null;
     public static Spinner spinnerAutos = null;
     public static final String PREFS_NAME = "AutoPrefsFile";
@@ -65,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         spinnerAutos.setOnItemSelectedListener(new OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
-                dbCont.changeCursorFuel(adapterfuel, id);
+                dbCont.changeCursorOperation(adapterOperation, id);
             }
             public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
         });
@@ -73,11 +73,11 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         // restore postion spinner
         if (id_auto != -1)  SelectSpinnerItemByValue(spinnerAutos, id_auto);
 
-        // Setup listView for fueling
+        // Setup listView for Operation
         fv = (ListView) findViewById(R.id.flist);
-        adapterfuel = dbCont.getAdapterFuel(getBaseContext());
-        dbCont.changeCursorFuel(adapterfuel, fv.getSelectedItemId());
-        fv.setAdapter(adapterfuel);
+        adapterOperation = dbCont.getAdapterOperation(getBaseContext());
+        dbCont.changeCursorOperation(adapterOperation, fv.getSelectedItemId());
+        fv.setAdapter(adapterOperation);
         View v = getLayoutInflater().inflate(R.layout.row_fuel_header, null);
         fv.addHeaderView(v);
 
@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.d(TAG, "Long click Item position:" + position + " id: " + id);
-                updateFueling();
+                updateOperation();
                 return true;
             }
         });
@@ -95,7 +95,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         fvAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addFueling();
+                addOperation();
             }
         });
 
@@ -176,12 +176,12 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
             return true;
         }
         if (id == R.id.addFuel) {
-            addFueling();
+            addOperation();
 
             return true;
         }
         if (id == R.id.updateFuel) {
-            updateFueling();
+            updateOperation();
 
             return true;
         }
@@ -190,29 +190,29 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
         return super.onOptionsItemSelected(item);
     }
 
-    private void addFueling() {
-        Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
-        Cursor cursor = adapterfuel.getCursor();
+    private void addOperation() {
+        Intent intent = new Intent(MainActivity.this, OperationEditorActivity.class);
+        Cursor cursor = adapterOperation.getCursor();
         cursor.moveToFirst();// in first record placed last data
         Date d = new Date();
         intent.putExtra("_id", -1);
         intent.putExtra("_date", d.getTime());
-        intent.putExtra("_prevOdo", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO)));
-        intent.putExtra("_prevTrip", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP)));
-        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
+        intent.putExtra("_prevOdo", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.ODO)));
+        intent.putExtra("_prevTrip", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.TRIP)));
+        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.ID_AUTO)));
         startActivity(intent);
     }
 
-    private void updateFueling() {
-        Intent intent = new Intent(MainActivity.this, FuelEditorActivity.class);
-        Cursor cursor = adapterfuel.getCursor();
+    private void updateOperation() {
+        Intent intent = new Intent(MainActivity.this, OperationEditorActivity.class);
+        Cursor cursor = adapterOperation.getCursor();
         intent.putExtra("_id", cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
-        intent.putExtra("_date", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.DATE)));
-        intent.putExtra("_prevOdo", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ODO)));
-        intent.putExtra("_prevTrip", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.TRIP)));
-        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.ID_AUTO)));
-        intent.putExtra("_summa", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.SUMMA)));
-        intent.putExtra("_litres", cursor.getFloat(cursor.getColumnIndex(DBTheme.Fueling.FuelColumns.LITR)));
+        intent.putExtra("_date", cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.DATE)));
+        intent.putExtra("_prevOdo", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.ODO)));
+        intent.putExtra("_prevTrip", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.TRIP)));
+        intent.putExtra("_id_auto", cursor.getLong(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.ID_AUTO)));
+        intent.putExtra("_summa", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.SUMMA)));
+        intent.putExtra("_qty", cursor.getFloat(cursor.getColumnIndex(DBTheme.Operation.OperationColumns.QTY)));
         startActivity(intent);
     }
 
@@ -261,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements SearchView.OnQuer
                                     int position, long id) {
                 Log.d(TAG, "itemClick: position = " + position + ", id = "
                         + id);
-                dbCont.changeCursorFuel(adapterfuel, id);
+                dbCont.changeCursorOperation(adapterOperation, id);
             }
         });
         lv.setOnItemSelectedListener(new OnItemSelectedListener() {
