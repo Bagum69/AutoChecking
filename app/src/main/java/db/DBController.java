@@ -18,6 +18,7 @@ import android.widget.SimpleCursorAdapter;
 
 import com.bagum.autochecking.R;
 
+import java.io.File;
 import java.util.ArrayList;
 
 
@@ -192,6 +193,40 @@ public class DBController {
             Log.e(TAG, "Failed to select Photos.", e);
         }
         return list;
+    }
+
+    public static void delPhoto(long id) {
+        String quer = String.format("DELETE FROM %s WHERE %s='%s'",
+                Photos.TABLE_NAME,  BaseColumns._ID, id
+        );
+        sqliteDB.execSQL(quer);
+    }
+
+    public static void integrityCheck() {
+        try {
+            final Cursor c = sqliteDB.query(Photos.TABLE_NAME, null, null, null, null, null, Photos.DEFAULT_SORT);
+            if (c.moveToFirst()) {
+                do {
+                    long id = c.getLong(0);
+                    String NAME = c.getString(2);
+
+                    try {
+                        File f = new File(NAME);
+                        if(!f.isFile()) {
+                            delPhoto(id);
+                        }
+                    }
+                    catch (Exception ee) {
+                        Log.d(TAG, "", ee);
+                    }
+
+
+                } while (c.moveToNext());
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to select Photos.", e);
+        }
     }
 
 }

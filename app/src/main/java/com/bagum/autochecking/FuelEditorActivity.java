@@ -1,11 +1,14 @@
 package com.bagum.autochecking;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -51,10 +54,21 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_fuel_editor);
+/*
+        progressDialog = ProgressDialog.show(this, "Process ", "please wait....", true, true);
+        new Thread ( new Runnable() {
+            public void run() {
+                you code
+            }
+        }).start();
 
+        Handler progressHandler = new Handler() {
+            public void handleMessage(Message msg1) {
+                progDialog.dismiss();
+            }
+        };
+*/
         fe = new Fueling();
         fe.setId(getIntent().getLongExtra("_id", -1));
         fe.setId_auto(getIntent().getLongExtra("_id_auto", 1));
@@ -73,6 +87,7 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
         //mDate.setOnFocusChangeListener(new DatePickerClick(this, d));
         mDate.setOnClickListener(new DatePickerClick(this, mDate));
 
+        MainActivity.dbCont.integrityCheck();
 
         if (savedInstanceState != null) {
             mCurrentPhotoPath = savedInstanceState.getString("curPic");
@@ -88,33 +103,9 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
         setupButtons();
         makePhotosPreview();
 
+
     }
 
-
-    private void makePhotosPreview() {
-        View linearLayout = findViewById(R.id.fe_left_column);
-        for (int i = 0; i < mPhotosList.size(); i++) {
-            if (findViewById(i) == null) {
-                ImageView iv = new ImageView(this);
-                iv.setId(i);
-                iv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-                iv.setPadding(5, 5, 5, 5);
-                iv.setOnClickListener(this);
-                //iv.setBackgroundColor(Color.GRAY);
-                //MarginLayoutParams.
-
-
-                ImageManager im = new ImageManager(getBaseContext(), 150, 150);
-                im.setIsResize(true);
-                im.setIsScale(true);
-                im.setUseOrientation(true);
-                String ss = (String) mPhotosList.get(i);
-                iv.setImageBitmap(im.getFromFile(ss));
-
-                ((LinearLayout) linearLayout).addView(iv);
-            }
-        }
-    }
 
     private void setupButtons() {
         Button btn = (Button) findViewById(R.id.fe_btn_save);
@@ -167,50 +158,6 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
     }
 
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        File storeDir = new File(storageDir, "Autochecking/");
-        storeDir.mkdir();
-        File image = File.createTempFile(imageFileName, ".jpg", storeDir);
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void dispatchTakePictureIntent() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = createImageFile();
-            } catch (IOException ex) {
-                // Error occurred while creating the File
-            }
-            if (photoFile != null) {
-                Uri uri = Uri.fromFile(photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
-            }
-        }
-    }
-
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK) {
-            if (requestCode == REQUEST_TAKE_PHOTO) {
-                Log.d(TAG, "=Activity result " + " requestCode:" + requestCode + "  resultCode:" + resultCode);
-                mPhotosList.add(mCurrentPhotoPath);
-                makePhotosPreview();
-            }
-        } else {
-            Log.d(TAG, "=Activity error result " + " requestCode:" + requestCode + "  resultCode:" + resultCode);
-        }
-    }
-
     private void setupSummaPrice() {
         mSumma = (EditText) findViewById(R.id.feSumma);
         mPrice = (EditText) findViewById(R.id.fePrice);
@@ -223,12 +170,10 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
 
         TextWatcher tw = (new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {   }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
+            public void onTextChanged(CharSequence s, int start, int before, int count) {  }
 
             @Override
             public void afterTextChanged(Editable s) {
@@ -310,6 +255,11 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
 
     }
 
+/*
+* ===================================================================================
+*               Working with menu
+* ===================================================================================
+*/
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -320,18 +270,142 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        switch (id) {
+            case R.id.action_make_photo: {
+                dispatchTakePictureIntent();
+                makePhotosPreview();
+                return true;
+            }
+            case R.id.action_clear_all_photo : {
+                // delete all photos from mPhotosList
+                deletePhotoFiles(mPhotosList);
+                // try delete all photos from db
+                MainActivity.dbCont.delAllPhotos(fe.getId());
+            }
 
+        }
         return super.onOptionsItemSelected(item);
     }
+
+
+/*
+* ===================================================================================
+*               Making photos and store
+* ===================================================================================
+*/
+
+    private void makePhotosPreview() {
+        View linearLayout = findViewById(R.id.fe_left_column);
+        for (int i = 0; i < mPhotosList.size(); i++) {
+            if (findViewById(i) == null) {
+                ImageView iv = new ImageView(this);
+                iv.setId(i);
+                iv.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
+                iv.setPadding(5, 5, 5, 5);
+                iv.setOnClickListener(this);
+
+                ImageManager im = new ImageManager(getBaseContext(), 150, 150);
+                im.setIsResize(true);
+                im.setIsScale(true);
+                im.setUseOrientation(true);
+                iv.setImageBitmap(im.getFromFile((String) mPhotosList.get(i)));
+
+                ((LinearLayout) linearLayout).addView(iv);
+            }
+        }
+    }
+
+    private void deletePhotoFiles(ArrayList PhotosList) {
+        View linearLayout = findViewById(R.id.fe_left_column);
+        try {
+            for (int i = 0; i < mPhotosList.size(); i++) {
+                File f = new File((String) mPhotosList.get(i));
+                f.delete();
+
+                View v = findViewById(i);
+                if (v!=null) ((LinearLayout) linearLayout).removeView(v);
+            }
+        }
+        catch (Exception e) {  Log.d(TAG, e.getMessage());  }
+        finally {
+            mPhotosList.clear();
+        }
+    }
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storeDir = new File(storageDir, "Autochecking/");
+        storeDir.mkdir();
+        File image = File.createTempFile(imageFileName, ".jpg", storeDir);
+        // Save a file: path for use with ACTION_VIEW intents
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+            }
+            if (photoFile != null) {
+                Uri uri = Uri.fromFile(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+                startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+            }
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_TAKE_PHOTO) {
+                Log.d(TAG, "=Activity result " + " requestCode:" + requestCode + "  resultCode:" + resultCode);
+                mPhotosList.add(mCurrentPhotoPath);
+                makePhotosPreview();
+            }
+        } else {
+            Log.d(TAG, "=Activity error result " + " requestCode:" + requestCode + "  resultCode:" + resultCode);
+        }
+    }
+
+
+/*
+* ===================================================================================
+*               Preview photos
+* ===================================================================================
+*/
+protected void viewImage() {
+    Intent intent = new Intent();
+    intent.setAction(Intent.ACTION_VIEW);
+    Log.d(TAG, "===Send file to view: " + Uri.parse(mCurrentPhotoPath).toString());
+    intent.setDataAndType(Uri.parse(mCurrentPhotoPath), "image/*");
+    startActivityForResult(intent, REQUEST_VIEW_PHOTO);
+}
+
+    @Override
+    public void onClick(View v) {
+        if (ImageView.class.isInstance(v)) {
+            Log.d(TAG, "==Clcked ImageView id: " + v.getId());
+
+            mCurrentPhotoPath = "file://"+(String)mPhotosList.get(v.getId());
+            viewImage();
+        }
+    }
+
+/*
+* ===================================================================================
+*               Other functional
+* ===================================================================================
+*/
 
     Float stringToFloat(String s) {
         try {
@@ -385,23 +459,5 @@ public class FuelEditorActivity extends ActionBarActivity implements View.OnClic
 
         return bmp;
 
-    }
-
-    protected void viewImage() {
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        Log.d(TAG, "===Send file to view: " + Uri.parse(mCurrentPhotoPath).toString());
-        intent.setDataAndType(Uri.parse(mCurrentPhotoPath), "image/*");
-        startActivityForResult(intent, REQUEST_VIEW_PHOTO);
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (ImageView.class.isInstance(v)) {
-            Log.d(TAG, "==Clcked ImageView id: " + v.getId());
-
-            mCurrentPhotoPath = "file://"+(String)mPhotosList.get(v.getId());
-            viewImage();
-        }
     }
 }

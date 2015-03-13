@@ -2,6 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.bagum.autochecking.FuelEditorActivity">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+    <item android:id="@+id/action_make_photo" android:title="@string/makePhoto"
+        android:orderInCategory="100" app:showAsAction="never" />
+    <item android:id="@+id/action_clear_all_photo" android:title="@string/clearPhoto"
         android:orderInCategory="100" app:showAsAction="never" />
 </menu>

@@ -19,5 +19,7 @@
     <string name="feBtnSave">Save</string>
     <string name="feBtnAdd">Add</string>
     <string name="feBtnUpdate">Update</string>
+    <string name="makePhoto">Make photo</string>
+    <string name="clearPhoto">Clear all photos</string>
 
 </resources>
