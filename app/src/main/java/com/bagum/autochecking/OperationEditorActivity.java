@@ -57,20 +57,6 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operation_editor);
-/*
-        progressDialog = ProgressDialog.show(this, "Process ", "please wait....", true, true);
-        new Thread ( new Runnable() {
-            public void run() {
-                you code
-            }
-        }).start();
-
-        Handler progressHandler = new Handler() {
-            public void handleMessage(Message msg1) {
-                progDialog.dismiss();
-            }
-        };
-*/
         fe = new Operation();
         fe.setId(getIntent().getLongExtra("_id", -1));
         fe.setId_auto(getIntent().getLongExtra("_id_auto", 1));
@@ -468,4 +454,17 @@ protected void viewImage() {
         return bmp;
 
     }
-}
+}/*
+        progressDialog = ProgressDialog.show(this, "Process ", "please wait....", true, true);
+        new Thread ( new Runnable() {
+            public void run() {
+                you code
+            }
+        }).start();
+
+        Handler progressHandler = new Handler() {
+            public void handleMessage(Message msg1) {
+                progDialog.dismiss();
+            }
+        };
+*/
