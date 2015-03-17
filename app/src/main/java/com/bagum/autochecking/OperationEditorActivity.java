@@ -92,10 +92,6 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
         }
 
 
-        setupOdoTrip();
-        setupSummaPrice();
-        setupButtons();
-        makePhotosPreview();
 
 
     }

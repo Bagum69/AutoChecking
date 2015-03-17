@@ -130,12 +130,17 @@ public class MainActivity extends ActionBarActivity implements
             case 1: {// add
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
-                .replace(R.id.container, OperEditFragment.newInstance(cmd, oper))
-                .addToBackStack(null)
-                .commit();
+                    .replace(R.id.container, OperEditFragment.newInstance(cmd, oper))
+                    .addToBackStack(null)
+                    .commit();
                 break;
             }
             case 2: {// edit
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, OperEditFragment.newInstance(cmd, oper))
+                        .addToBackStack(null)
+                        .commit();
                 break;
             }
         }
