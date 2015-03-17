@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bagum.autochecking" >
+
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -28,6 +29,10 @@
         <activity
             android:name=".OperationEditorActivity"
             android:label="@string/title_activity_fuel_editor" >
+        </activity>
+        <activity
+            android:name=".WorkActivity"
+            android:label="@string/title_activity_work" >
         </activity>
     </application>
 

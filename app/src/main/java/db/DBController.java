@@ -132,6 +132,9 @@ public class DBController {
         values.put(OperationColumns.TRIP,    Operation.getTrip());
         values.put(OperationColumns.SUMMA,   Operation.getSumma());
         values.put(OperationColumns.QTY,    Operation.getQty());
+        values.put(OperationColumns.PRICE,    Operation.getPrice());
+        values.put(OperationColumns.TYPE,    Operation.getType());
+        values.put(OperationColumns.STATE,    Operation.getState());
         return sqliteDB.insert(Operation.TABLE, null, values);
         /*
         String quer = String.format("INSERT INTO %s (%s, %s, %s, %s, %s, %s) VALUES ('%s', '%s', '%s', '%s', '%s', '%s');",
@@ -156,11 +159,25 @@ public class DBController {
                 OperationColumns.TRIP,Operation.getTrip(),
                 OperationColumns.SUMMA,Operation.getSumma(),
                 OperationColumns.QTY, Operation.getQty(),
+                OperationColumns.PRICE, Operation.getPrice(),
+                OperationColumns.STATE, Operation.getState(),
+                OperationColumns.TYPE, Operation.getType(),
                 BaseColumns._ID, Operation.getId()
 
         );
         sqliteDB.execSQL(quer);
     }
+    public static void deleteOperation(long id) {
+        String quer = String.format("delete from %s"+
+                        " where %s='%s'",
+                // таблица
+                Operation.TABLE,
+                // колонки
+                BaseColumns._ID, id
+        );
+        sqliteDB.execSQL(quer);
+    }
+
 
     public static void addPhoto(Long id_event, String name) {
         String quer = String.format("INSERT INTO %s (%s, %s) VALUES ('%s', '%s');",

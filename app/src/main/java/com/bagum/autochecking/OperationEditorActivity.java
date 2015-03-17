@@ -4,11 +4,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -30,8 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import db.DBController;
 import db.DBHelper;
-import db.DBTheme;
 import db.DBTheme.Operation;
 
 
@@ -52,11 +49,16 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
     EditText mDate;
     ImageView mImageView;
     Operation fe;
+    public static DBController dbCont = null;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_operation_editor);
+
+        dbCont = WorkActivity.dbCont;
+
         fe = new Operation();
         fe.setId(getIntent().getLongExtra("_id", -1));
         fe.setId_auto(getIntent().getLongExtra("_id_auto", 1));
@@ -79,13 +81,13 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
         //mDate.setOnFocusChangeListener(new DatePickerClick(this, d));
         mDate.setOnClickListener(new DatePickerClick(this, mDate));
 
-        MainActivity.dbCont.integrityCheck();
+        dbCont.integrityCheck();
 
         if (savedInstanceState != null) {
             mCurrentPhotoPath = savedInstanceState.getString("curPic");
             mPhotosList = savedInstanceState.getIntegerArrayList("photosList");
         } else {
-            mPhotosList = MainActivity.dbCont.getPhotosList(fe.getId());
+            mPhotosList = dbCont.getPhotosList(fe.getId());
             mCurrentPhotoPath = "";
         }
 
@@ -115,21 +117,22 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
                 Operation.setTrip(mTrip.getText().toString());
                 Operation.setSumma(mSumma.getText().toString());
                 Operation.setQty(mQty.getText().toString());
+                Operation.setPrice(mPrice.getText().toString());
                 Operation.setType(DBHelper.OPR_TYPE_FUEL);
                 Operation.setState(DBHelper.OPR_STATE_INCOMPLETE);
                 if (fe.getId() == -1) { // add new event
-                    fe.setId(MainActivity.dbCont.addOperation(Operation));
+                    fe.setId(dbCont.addOperation(Operation));
                     for (int i = 0; i < mPhotosList.size(); i++) {
-                        MainActivity.dbCont.addPhoto(fe.getId(), (String) mPhotosList.get(i));
+                        dbCont.addPhoto(fe.getId(), (String) mPhotosList.get(i));
                     }
                 } else {
-                    MainActivity.dbCont.updateOperation(Operation);
-                    MainActivity.dbCont.delAllPhotos(fe.getId());
+                    dbCont.updateOperation(Operation);
+                    dbCont.delAllPhotos(fe.getId());
                     for (int i = 0; i < mPhotosList.size(); i++) {
-                        MainActivity.dbCont.addPhoto(fe.getId(), (String) mPhotosList.get(i));
+                        dbCont.addPhoto(fe.getId(), (String) mPhotosList.get(i));
                     }
                 }
-                MainActivity.dbCont.changeCursorOperation(MainActivity.adapterOperation, MainActivity.spinnerAutos.getSelectedItemId());
+                dbCont.changeCursorOperation(WorkActivity.adapterOperation, WorkActivity.spinnerAutos.getSelectedItemId());
                 finish();
             }
         });
@@ -233,7 +236,7 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
                         }
                     }
                 } else if (mTrip.getText().hashCode() == s.hashCode()) {
-                    if (mTrip.isFocused()) {
+                    if (mTrip.isFocused() && fe.getTrip()==-1) {
                         Operation ff = new Operation();
                         ff.setTrip(mTrip.getText().toString());
                         if (ff.getTrip() > 0) {
@@ -277,7 +280,7 @@ public class OperationEditorActivity extends ActionBarActivity implements View.O
                 // delete all photos from mPhotosList
                 deletePhotoFiles(mPhotosList);
                 // try delete all photos from db
-                MainActivity.dbCont.delAllPhotos(fe.getId());
+                dbCont.delAllPhotos(fe.getId());
             }
 
         }

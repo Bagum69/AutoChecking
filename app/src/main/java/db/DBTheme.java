@@ -89,41 +89,31 @@ public class DBTheme {
         public int getState() {
             return state;
         }
-
         public void setState(int state) {
             this.state = state;
         }
-
-
         public long getId() {
             return this.id;
         }
-
         public long getId_auto() {
             return this.id_auto;
         }
-
         public Long getDate() {
             return this.date.getTime();
         }
-
         public String getDateString() {
             DateFormat df = new DateFormat();
             return df.format("dd.MM.yyyy", this.date).toString();
         }
-
         public Float getOdo() {
             return odo;
         }
-
         public String getOdoString() {
             return formatter.format(odo);
         }
-
         public Float getTrip() {
             return trip;
         }
-
         public String getTripString() {
             return formatter.format(trip);
         }
