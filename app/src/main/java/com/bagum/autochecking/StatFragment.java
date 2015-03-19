@@ -7,6 +7,10 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import db.DBController;
+import db.Stat;
 
 
 /**
@@ -18,6 +22,9 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class StatFragment extends PlaceholderFragment {
+    DBController dbCont;
+    View mView;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -52,8 +59,46 @@ public class StatFragment extends PlaceholderFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        mView = inflater.inflate(R.layout.fragment_stat, container, false);
+
+        dbCont = new DBController(getActivity().getBaseContext());
+        Stat stat = dbCont.getStat(2);
+
+        TextView ld = (TextView)mView.findViewById(R.id.last_date);
+        ld.setText(stat.getLastDateString());
+
+        TextView lr = (TextView)mView.findViewById(R.id.last_rate);
+        lr.setText(stat.getLastRateString());
+
+        TextView lq = (TextView)mView.findViewById(R.id.last_qty);
+        lq.setText(stat.getLastQtyString());
+
+        TextView lt = (TextView)mView.findViewById(R.id.last_trip);
+        lt.setText(stat.getLastTripString());
+
+
+        TextView mr = (TextView)mView.findViewById(R.id.month_rate);
+        mr.setText(stat.getMonthRateString());
+
+        TextView mq = (TextView)mView.findViewById(R.id.month_qty);
+        mq.setText(stat.getMonthQtyString());
+
+        TextView mt = (TextView)mView.findViewById(R.id.month_trip);
+        mt.setText(stat.getMonthTripString());
+
+        TextView pmr = (TextView)mView.findViewById(R.id.pmonth_rate);
+        pmr.setText(stat.getPMonthRateString());
+
+        TextView pmq = (TextView)mView.findViewById(R.id.pmonth_qty);
+        pmq.setText(stat.getPMonthQtyString());
+
+        TextView pmt = (TextView)mView.findViewById(R.id.pmonth_trip);
+        pmt.setText(stat.getPMonthTripString());
+
+
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_stat, container, false);
+        return mView;
     }
 
 }

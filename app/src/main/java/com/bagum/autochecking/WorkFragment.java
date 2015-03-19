@@ -99,8 +99,8 @@ public class WorkFragment extends PlaceholderFragment {
                     public void run() {
                         try {
                             // Inflate the layout for this fragment
-
-                                SharedPreferences settings = mActivity.getSharedPreferences(PREFS_NAME, 0);
+                            /*
+                            SharedPreferences settings = mActivity.getSharedPreferences(PREFS_NAME, 0);
                             id_auto = settings.getLong("id_auto", -1);
 
                             dbCont = new DBController(mActivity.getBaseContext());
@@ -109,7 +109,6 @@ public class WorkFragment extends PlaceholderFragment {
                             // Make Spinner for select autos
                             adapterSpin = dbCont.getAdapterSpin2(mActivity.getBaseContext());
 
-                            adapterOperation = dbCont.getAdapterOperation(mActivity.getBaseContext());
 
                             spinnerAutos = (Spinner) mView.findViewById(R.id.spinner);
                             spinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -122,12 +121,13 @@ public class WorkFragment extends PlaceholderFragment {
                             spinnerAutos.setAdapter(adapterSpin);
                             // restore postion spinner
                             if (id_auto != -1)  SelectSpinnerItemByValue(spinnerAutos, id_auto);
+                            */
 
-
+                            adapterOperation = dbCont.getAdapterOperation(mActivity.getBaseContext());
                             // Setup listView for Operation
                             fv = (ListView) mView.findViewById(R.id.flist);
 
-                            dbCont.changeCursorOperation(adapterOperation, fv.getSelectedItemId());
+                            dbCont.changeCursorOperation(adapterOperation, Long.valueOf(2));//fv.getSelectedItemId()
                             fv.setAdapter(adapterOperation);
                             View v = mActivity.getLayoutInflater().inflate(R.layout.row_fuel_header, null);
                             fv.addHeaderView(v);
@@ -156,19 +156,6 @@ public class WorkFragment extends PlaceholderFragment {
 
 
 
-    //================================================================================
-    //
-    //================================================================================
-    public static void SelectSpinnerItemByValue(Spinner spnr, long value)
-    {
-        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
-        for (int position = 0; position < adapter.getCount(); position++)
-            if(adapter.getItemId(position) == value)
-            {
-                spnr.setSelection(position);
-                return;
-            }
-    }
 
 
     /*

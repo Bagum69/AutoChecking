@@ -2,6 +2,7 @@ package com.bagum.autochecking;
 
 import android.app.Activity;
 
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -9,13 +10,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
+import db.DBController;
 import db.DBTheme;
 
 
@@ -32,12 +38,40 @@ public class MainActivity extends ActionBarActivity implements
 
 
     private static final String TAG = MainActivity.class.getSimpleName();
+    DBController dbCont;
+    private long id_auto;
+    public static final String PREFS_NAME = "AutoPrefsFile";
+    SimpleCursorAdapter mAdapterSpin;
+    Spinner mSpinnerAutos;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //===========================================================================
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        id_auto = settings.getLong("id_auto", -1);
+
+        //===========================================================================
+        dbCont = new DBController(getBaseContext());
+        // Make Spinner for select autos
+        mAdapterSpin = dbCont.getAdapterSpin2(getBaseContext());
+        mSpinnerAutos = (Spinner) findViewById(R.id.spinner);
+        mSpinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
+                //dbCont.changeCursorOperation(adapterOperation, id);
+            }
+            public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
+        });
+        mSpinnerAutos.setAdapter(mAdapterSpin);
+        // restore postion spinner
+        if (id_auto != -1)  SelectSpinnerItemByValue(mSpinnerAutos, id_auto);
+        //===========================================================================
+
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -147,4 +181,17 @@ public class MainActivity extends ActionBarActivity implements
         Toast.makeText(this, "Cmd from fragment:"+cmd + " id:" + oper.getId(), Toast.LENGTH_SHORT).show();
     }
 
+    //================================================================================
+    //
+    //================================================================================
+    public static void SelectSpinnerItemByValue(Spinner spnr, long value)
+    {
+        SimpleCursorAdapter adapter = (SimpleCursorAdapter) spnr.getAdapter();
+        for (int position = 0; position < adapter.getCount(); position++)
+            if(adapter.getItemId(position) == value)
+            {
+                spnr.setSelection(position);
+                return;
+            }
+    }
 }

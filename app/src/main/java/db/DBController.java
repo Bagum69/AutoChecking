@@ -20,6 +20,8 @@ import com.bagum.autochecking.R;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -244,6 +246,90 @@ public class DBController {
         } catch (Exception e) {
             Log.e(TAG, "Failed to select Photos.", e);
         }
+    }
+
+    public Stat getStat(long id_auto) {
+        Stat stat = new Stat();
+
+        final Calendar end = Calendar.getInstance();
+        int year = end.get(Calendar.YEAR);
+        int month = end.get(Calendar.MONTH);
+        int day = end.get(Calendar.DAY_OF_MONTH);
+
+
+        try {
+            final Cursor c = sqliteDB.query(Operation.TABLE, new String[]{
+                            OperationColumns.DATE,
+                            OperationColumns.QTYTRIP,
+                            OperationColumns.PQTY,
+                            OperationColumns.TRIP},
+                    OperationColumns.ID_AUTO + " = '" + id_auto + "'",
+                    null, null, null, Operation.DEFAULT_SORT, "20");
+            if (c.moveToFirst()) {
+                stat.setLastDate(c.getLong(0));
+                stat.setLastRate(c.getFloat(1));
+                stat.setLastQty(c.getFloat(2));
+                stat.setLastTrip(c.getFloat(3));
+            };
+            c.close();
+
+        }catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
+
+        Calendar start = Calendar.getInstance();
+        start.set(year, month, 1);
+        Date ds = new Date(start.getTimeInMillis());
+        Date de = new Date(end.getTimeInMillis());
+
+        try {
+            String  ss = "SELECT "
+                    + " SUM (" + OperationColumns.PQTY + ") as SUM_PQTY, "
+                    + " SUM (" + OperationColumns.TRIP + ") as SUM_TRIP "
+                    + " FROM " + Operation.TABLE
+                    + " WHERE "
+                    + OperationColumns.ID_AUTO + " = '" + id_auto + "' AND DATE BETWEEN '" + ds.getTime() + "' and '" + de.getTime() + "' "
+                    + " ORDER BY " +Operation.DEFAULT_SORT;
+            final Cursor c = sqliteDB.rawQuery(ss, null);
+            c.moveToFirst();
+            stat.setMonthQty(c.getFloat(0));
+            stat.setMonthTrip(c.getFloat(1));
+
+            c.close();
+            stat.setMonthRate(stat.getMonthQty()/stat.getMonthTrip()*100);
+        }catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+
+
+        start.roll(Calendar.MONTH, false);
+        end.roll(Calendar.MONTH, false);
+        end.set(Calendar.DATE, end.getActualMaximum(Calendar.DATE));
+
+        ds = new Date(start.getTimeInMillis());
+        de = new Date(end.getTimeInMillis());
+
+        try {
+            String  ss = "SELECT "
+                    + " SUM (" + OperationColumns.PQTY + ") as SUM_PQTY, "
+                    + " SUM (" + OperationColumns.TRIP + ") as SUM_TRIP "
+                    + " FROM " + Operation.TABLE
+                    + " WHERE "
+                    + OperationColumns.ID_AUTO + " = '" + id_auto + "' AND DATE BETWEEN '" + ds.getTime() + "' and '" + de.getTime() + "' "
+                    + " ORDER BY " +Operation.DEFAULT_SORT;
+            final Cursor c = sqliteDB.rawQuery(ss, null);
+            c.moveToFirst();
+            stat.setPMonthQty(c.getFloat(0));
+            stat.setPMonthTrip(c.getFloat(1));
+
+            c.close();
+            stat.setPMonthRate(stat.getPMonthQty()/stat.getPMonthTrip()*100);
+        }catch (Exception e){
+            Log.d(TAG, e.getMessage());
+        }
+
+
+        return stat;
     }
 
 }
