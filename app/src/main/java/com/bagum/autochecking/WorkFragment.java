@@ -100,7 +100,7 @@ public class WorkFragment extends PlaceholderFragment {
                         try {
                             // Inflate the layout for this fragment
 
-                            SharedPreferences settings = mActivity.getSharedPreferences(PREFS_NAME, 0);
+                                SharedPreferences settings = mActivity.getSharedPreferences(PREFS_NAME, 0);
                             id_auto = settings.getLong("id_auto", -1);
 
                             dbCont = new DBController(mActivity.getBaseContext());
@@ -180,20 +180,27 @@ public class WorkFragment extends PlaceholderFragment {
     private void addOperation() {
         Operation fo = new Operation();
         Cursor cursor = adapterOperation.getCursor();
-        cursor.moveToFirst();// in first record placed last data
-        Date d = new Date();
+        if (cursor != null) {
+            try {
+                cursor.moveToFirst();// in first record placed last data
+                Date d = new Date();
 
-        fo.setId(-1);
-        fo.setDate(d.getTime());
-        fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
-        fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
-        fo.setId_auto(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.ID_AUTO)));
-        fo.setSumma(Float.valueOf(0));
-        fo.setPrice(Float.valueOf(0));
-        fo.setQty(Float.valueOf(0));
-        fo.setType(DBHelper.OPR_TYPE_FUEL);
-        fo.setState(DBHelper.OPR_STATE_INCOMPLETE);
-        mListener.onFragmentInteraction(1, fo);
+                fo.setId(-1);
+                fo.setDate(d.getTime());
+                fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
+                fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
+                fo.setId_auto(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.ID_AUTO)));
+                fo.setSumma(Float.valueOf(0));
+                fo.setPrice(Float.valueOf(0));
+                fo.setQty(Float.valueOf(0));
+                fo.setType(DBHelper.OPR_TYPE_FUEL);
+                fo.setState(DBHelper.OPR_STATE_INCOMPLETE);
+                mListener.onFragmentInteraction(1, fo);
+            }
+            catch (Exception e) {
+                Log.d(TAG, e.getMessage());
+            }
+        }
     }
 
 
@@ -282,4 +289,18 @@ public class WorkFragment extends PlaceholderFragment {
         return true;
     }
 
+    @Override
+    public void onStop () {
+        super.onStop();
+
+        // We need an Editor object to make preference changes.
+        // All objects are from android.context.Context
+        Cursor cursor = adapterSpin.getCursor();
+        Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putLong("id_auto", id_auto);
+        // Commit the edits!
+        editor.commit();
+    }
 }
