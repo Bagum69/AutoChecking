@@ -19,7 +19,7 @@
 	<record>
 		<date>14.02.2012</date>
 		<odo>148957</odo>
-		<trip>243</trip>
+		<trip>125</trip>
 		<summa>500</summa>
 		<qty>21.8340611353712</qty>
 		<pr>22.9</pr>
@@ -27,7 +27,7 @@
 	<record>
 		<date>18.02.2012</date>
 		<odo>149167</odo>
-		<trip>453</trip>
+		<trip>210</trip>
 		<summa>500</summa>
 		<qty>21.83406</qty>
 		<pr>22.9000011908001</pr>
@@ -35,7 +35,7 @@
 	<record>
 		<date>24.02.2012</date>
 		<odo>149328</odo>
-		<trip>614</trip>
+		<trip>161</trip>
 		<summa>500</summa>
 		<qty>21.83406</qty>
 		<pr>22.9000011908001</pr>
@@ -43,7 +43,7 @@
 	<record>
 		<date>25.02.2012</date>
 		<odo>149363</odo>
-		<trip>649</trip>
+		<trip>35</trip>
 		<summa>350</summa>
 		<qty>15.2838427947598</qty>
 		<pr>22.9</pr>
@@ -51,7 +51,7 @@
 	<record>
 		<date>25.02.2012</date>
 		<odo>149866</odo>
-		<trip>1152</trip>
+		<trip>503</trip>
 		<summa>906.84</summa>
 		<qty>39.6</qty>
 		<pr>22.9</pr>
@@ -59,7 +59,7 @@
 	<record>
 		<date>06.03.2012</date>
 		<odo>150166</odo>
-		<trip>1452</trip>
+		<trip>300</trip>
 		<summa>857.54</summa>
 		<qty>37.4471615720524</qty>
 		<pr>22.9</pr>
@@ -67,7 +67,7 @@
 	<record>
 		<date>17.03.2012</date>
 		<odo>150527</odo>
-		<trip>1813</trip>
+		<trip>361</trip>
 		<summa>912</summa>
 		<qty>40</qty>
 		<pr>22.8</pr>
@@ -75,7 +75,7 @@
 	<record>
 		<date>24.03.2012</date>
 		<odo>150795</odo>
-		<trip>2081</trip>
+		<trip>268</trip>
 		<summa>648.43</summa>
 		<qty>28.4399122807018</qty>
 		<pr>22.8</pr>
@@ -644,21 +644,13 @@
 		<date>22.05.2014</date>
 		<odo>175187.2</odo>
 		<trip>283.6</trip>
-		<summa>1000</summa>
-		<qty>32.6797385620915</qty>
-		<pr>30.6</pr>
-	</record>
-	<record>
-		<date>07.06.2014</date>
-		<odo>175543.2</odo>
-		<trip>356</trip>
-		<summa>1000</summa>
-		<qty>32.6797385620915</qty>
-		<pr>30.6</pr>
+		<summa>2000</summa>
+		<qty>65.35947</qty>
+		<pr>30.6000033354004</pr>
 	</record>
 	<record>
 		<date>12.06.2014</date>
-		<odo>175982.2</odo>
+		<odo>175626.2</odo>
 		<trip>439</trip>
 		<summa>1000</summa>
 		<qty>31.25</qty>
@@ -666,7 +658,7 @@
 	</record>
 	<record>
 		<date>14.06.2014</date>
-		<odo>176317.2</odo>
+		<odo>175961.2</odo>
 		<trip>335</trip>
 		<summa>782</summa>
 		<qty>29.1899962672639</qty>
@@ -674,7 +666,7 @@
 	</record>
 	<record>
 		<date>14.06.2014</date>
-		<odo>176904.2</odo>
+		<odo>176548.2</odo>
 		<trip>587</trip>
 		<summa>500</summa>
 		<qty>16.025641025641</qty>
@@ -682,31 +674,31 @@
 	</record>
 	<record>
 		<date>20.06.2014</date>
-		<odo>177144.2</odo>
-		<trip>240</trip>
+		<odo>176785.5</odo>
+		<trip>237.3</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
 		<pr>28.9</pr>
 	</record>
 	<record>
 		<date>09.07.2014</date>
-		<odo>177474.2</odo>
-		<trip>330</trip>
+		<odo>177095.5</odo>
+		<trip>310</trip>
 		<summa>1000</summa>
 		<qty>31.1526479750779</qty>
 		<pr>32.1</pr>
 	</record>
 	<record>
 		<date>22.07.2014</date>
-		<odo>177804.2</odo>
-		<trip>330</trip>
+		<odo>177405.5</odo>
+		<trip>310</trip>
 		<summa>1000</summa>
 		<qty>31.3479623824451</qty>
 		<pr>31.9</pr>
 	</record>
 	<record>
 		<date>28.07.2014</date>
-		<odo>178119.2</odo>
+		<odo>177720.5</odo>
 		<trip>315</trip>
 		<summa>1000</summa>
 		<qty>32.1543408360129</qty>
@@ -714,7 +706,7 @@
 	</record>
 	<record>
 		<date>17.08.2014</date>
-		<odo>178404.2</odo>
+		<odo>178005.5</odo>
 		<trip>285</trip>
 		<summa>1000</summa>
 		<qty>32.1543408360129</qty>
@@ -722,7 +714,7 @@
 	</record>
 	<record>
 		<date>23.08.2014</date>
-		<odo>178896.2</odo>
+		<odo>178497.5</odo>
 		<trip>492</trip>
 		<summa>1000</summa>
 		<qty>31.1526479750779</qty>
@@ -730,7 +722,7 @@
 	</record>
 	<record>
 		<date>01.09.2014</date>
-		<odo>179315.2</odo>
+		<odo>178916.5</odo>
 		<trip>419</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -738,7 +730,7 @@
 	</record>
 	<record>
 		<date>14.09.2014</date>
-		<odo>179592.2</odo>
+		<odo>179193.5</odo>
 		<trip>277</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -746,7 +738,7 @@
 	</record>
 	<record>
 		<date>26.09.2014</date>
-		<odo>179877.2</odo>
+		<odo>179478.5</odo>
 		<trip>285</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -754,7 +746,7 @@
 	</record>
 	<record>
 		<date>10.10.2014</date>
-		<odo>180148.2</odo>
+		<odo>179749.5</odo>
 		<trip>271</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -762,7 +754,7 @@
 	</record>
 	<record>
 		<date>24.10.2014</date>
-		<odo>180425.2</odo>
+		<odo>180026.5</odo>
 		<trip>277</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -770,7 +762,7 @@
 	</record>
 	<record>
 		<date>08.11.2014</date>
-		<odo>180678.2</odo>
+		<odo>180279.5</odo>
 		<trip>253</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -778,7 +770,7 @@
 	</record>
 	<record>
 		<date>03.12.2014</date>
-		<odo>180831.2</odo>
+		<odo>180432.5</odo>
 		<trip>153</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
@@ -786,7 +778,7 @@
 	</record>
 	<record>
 		<date>14.12.2014</date>
-		<odo>181045.2</odo>
+		<odo>180646.5</odo>
 		<trip>214</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
@@ -794,7 +786,7 @@
 	</record>
 	<record>
 		<date>25.12.2014</date>
-		<odo>181351.2</odo>
+		<odo>180952.5</odo>
 		<trip>306</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
@@ -802,39 +794,39 @@
 	</record>
 	<record>
 		<date>02.01.2015</date>
-		<odo>181671.2</odo>
-		<trip>320</trip>
+		<odo>181500.5</odo>
+		<trip>548</trip>
 		<summa>1074.78</summa>
 		<qty>33.0701538461538</qty>
 		<pr>32.5</pr>
 	</record>
 	<record>
 		<date>06.01.2015</date>
-		<odo>181971.2</odo>
-		<trip>300</trip>
+		<odo>182025.5</odo>
+		<trip>525</trip>
 		<summa>1000</summa>
 		<qty>30.4878048780488</qty>
 		<pr>32.8</pr>
 	</record>
 	<record>
 		<date>06.01.2015</date>
-		<odo>182281.2</odo>
-		<trip>310</trip>
+		<odo>182508.5</odo>
+		<trip>483</trip>
 		<summa>500</summa>
 		<qty>15.3846153846154</qty>
 		<pr>32.5</pr>
 	</record>
 	<record>
 		<date>13.01.2015</date>
-		<odo>182431.2</odo>
-		<trip>150</trip>
+		<odo>182752.5</odo>
+		<trip>244</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
 		<pr>28.9</pr>
 	</record>
 	<record>
 		<date>23.01.2015</date>
-		<odo>182727.2</odo>
+		<odo>183048.5</odo>
 		<trip>296</trip>
 		<summa>1334.56</summa>
 		<qty>42.5019108280255</qty>
@@ -842,23 +834,23 @@
 	</record>
 	<record>
 		<date>23.01.2015</date>
-		<odo>183017.2</odo>
-		<trip>290</trip>
+		<odo>183538.5</odo>
+		<trip>490</trip>
 		<summa>1000</summa>
 		<qty>30.5343511450382</qty>
 		<pr>32.75</pr>
 	</record>
 	<record>
 		<date>25.01.2015</date>
-		<odo>183297.2</odo>
-		<trip>280</trip>
+		<odo>183878.5</odo>
+		<trip>340</trip>
 		<summa>1000</summa>
 		<qty>30.7692307692308</qty>
 		<pr>32.5</pr>
 	</record>
 	<record>
 		<date>26.01.2015</date>
-		<odo>183567.2</odo>
+		<odo>184148.5</odo>
 		<trip>270</trip>
 		<summa>1000</summa>
 		<qty>31.8471337579618</qty>
@@ -866,15 +858,15 @@
 	</record>
 	<record>
 		<date>05.02.2015</date>
-		<odo>184206</odo>
-		<trip>638</trip>
+		<odo>184455.5</odo>
+		<trip>307</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
 		<pr>28.9</pr>
 	</record>
 	<record>
 		<date>14.02.2015</date>
-		<odo>184515</odo>
+		<odo>184764.5</odo>
 		<trip>309</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
@@ -882,7 +874,7 @@
 	</record>
 	<record>
 		<date>22.02.2015</date>
-		<odo>184730</odo>
+		<odo>184979.5</odo>
 		<trip>215</trip>
 		<summa>1500</summa>
 		<qty>51.9031141868512</qty>
@@ -890,10 +882,18 @@
 	</record>
 	<record>
 		<date>06.03.2015</date>
-		<odo>185280</odo>
-		<trip>550</trip>
+		<odo>185534.5</odo>
+		<trip>555</trip>
 		<summa>1000</summa>
 		<qty>34.6020761245675</qty>
 		<pr>28.9</pr>
+	</record>
+	<record>
+		<date>15.03.2015</date>
+		<odo>185843</odo>
+		<trip>308.5</trip>
+		<summa>1000</summa>
+		<qty>34.602076</qty>
+		<pr>28.90000010404</pr>
 	</record>
 </data-set>

@@ -295,12 +295,17 @@ public class WorkFragment extends PlaceholderFragment {
 
         // We need an Editor object to make preference changes.
         // All objects are from android.context.Context
-        Cursor cursor = adapterSpin.getCursor();
-        Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
-        SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putLong("id_auto", id_auto);
-        // Commit the edits!
-        editor.commit();
+        try {
+            Cursor cursor = adapterSpin.getCursor();
+            Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+            SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("id_auto", id_auto);
+            // Commit the edits!
+            editor.commit();
+        }
+        catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
     }
 }

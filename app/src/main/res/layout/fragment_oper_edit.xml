@@ -7,140 +7,160 @@ android:paddingBottom="@dimen/activity_vertical_margin"
 tools:context="com.bagum.autochecking.OperEditFragment"
 android:orientation="vertical">
     <ScrollView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-<LinearLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="horizontal"
-    android:layout_weight="1">
-
-    <LinearLayout
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="1">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feDateLabel"
-            android:id="@+id/textView3" />
-
-        <EditText
-            android:layout_width="107dp"
-            android:layout_height="wrap_content"
-            android:inputType="date"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/feDate" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feLabelOdo"
-            android:singleLine="true"
-            android:id="@+id/textView4" />
-
-        <EditText
-            android:layout_width="119dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/feOdo" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feLabelTrip"
-            android:id="@+id/textView5" />
-
-        <EditText
-            android:layout_width="118dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/feTrip" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feLabelSumma"
-            android:id="@+id/textView6"
-            android:singleLine="true" />
-
-        <EditText
-            android:layout_width="118dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/feSumma" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feLabelPrice"
-            android:id="@+id/textView7" />
-
-        <EditText
-            android:layout_width="92dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/fePrice" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feLabelQty"
-            android:id="@+id/textView8" />
-
-        <EditText
-            android:layout_width="98dp"
-            android:layout_height="wrap_content"
-            android:inputType="numberDecimal"
-            android:ems="10"
-            android:background="@drawable/textlines"
-            android:id="@+id/feQty" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/feBtnSave"
-            android:id="@+id/fe_btn_save"
-            android:focusable="true">
-            <requestFocus/>
-        </Button>
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/fe_left_column"
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_weight="4">
-    </LinearLayout>
+        android:fillViewport="true">
+        <LinearLayout
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="1">
 
-</LinearLayout>
+                    <LinearLayout
+                        android:layout_height="match_parent"
+                        android:layout_width="match_parent"
+                        android:orientation="vertical"
+                        android:layout_weight="1">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feDateLabel"
+                            android:id="@+id/textView3" />
+
+                        <EditText
+                            android:layout_width="107dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="date"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/feDate" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feLabelOdo"
+                            android:singleLine="true"
+                            android:id="@+id/textView4" />
+
+                        <EditText
+                            android:layout_width="119dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/feOdo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feLabelTrip"
+                            android:id="@+id/textView5" />
+
+                        <EditText
+                            android:layout_width="118dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/feTrip" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feLabelSumma"
+                            android:id="@+id/textView6"
+                            android:singleLine="true" />
+
+                        <EditText
+                            android:layout_width="118dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/feSumma" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feLabelPrice"
+                            android:id="@+id/textView7" />
+
+                        <EditText
+                            android:layout_width="92dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/fePrice" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/feLabelQty"
+                            android:id="@+id/textView8" />
+
+                        <EditText
+                            android:layout_width="98dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal"
+                            android:ems="10"
+                            android:background="@drawable/textlines"
+                            android:id="@+id/feQty" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                            android:id="@+id/fe_left_column"
+                            android:layout_height="match_parent"
+                            android:layout_width="match_parent"
+                            android:orientation="vertical"
+                            android:layout_weight="4">
+                    </LinearLayout>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_height="match_parent"
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_weight="7"                >
+                <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="2"
+                    android:gravity="bottom">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/fe_btn_photo"
+                        android:adjustViewBounds="false"
+                        android:src="@drawable/photos_icon_small"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="bottom|right" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_height="match_parent"
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_weight="3">
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/feBtnSave"
+                        android:id="@+id/fe_btn_save"
+                        android:focusable="false"
+                        android:src="@drawable/fuel_confirm"
+                        android:background="@android:color/transparent"
+                        android:layout_gravity="bottom|right"/>
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
     </ScrollView>
-<LinearLayout
-    android:layout_height="match_parent"
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_weight="7"
-    android:gravity="center|bottom">
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/fe_btn_photo"
-        android:adjustViewBounds="false"
-        android:src="@drawable/photos_icon_small"
-        android:background="@android:color/transparent"
-        android:layout_gravity="center_horizontal|bottom" />
-</LinearLayout>
-
 </LinearLayout>

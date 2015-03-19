@@ -59,7 +59,7 @@ tools:context="com.bagum.autochecking.WorkFragment" >
 
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
-            android:alpha="0.5" />
+            android:adjustViewBounds="false" />
     </RelativeLayout>
 
 </LinearLayout>

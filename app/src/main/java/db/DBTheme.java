@@ -243,6 +243,8 @@ public class DBTheme {
             public static final String QTY = "qty";
             public static final String TYPE = "type";
             public static final String STATE = "state";
+            public static final String PQTY = "pqty";
+            public static final String QTYTRIP = "qtytrip";
         }
     }
 

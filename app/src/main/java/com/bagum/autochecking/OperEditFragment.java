@@ -11,6 +11,9 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -78,7 +81,7 @@ public class OperEditFragment extends Fragment  implements View.OnClickListener 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         mView = inflater.inflate(R.layout.fragment_oper_edit, container, false);
-
+        setHasOptionsMenu(true);
 
         dbCont = new DBController(getActivity().getBaseContext());
 
@@ -146,9 +149,9 @@ public class OperEditFragment extends Fragment  implements View.OnClickListener 
 
 
     private void setupButtons() {
-        Button btn = (Button) mView.findViewById(R.id.fe_btn_save);
-        if (fe.getId() == -1) btn.setText(R.string.feBtnAdd);
-        else btn.setText(R.string.feBtnUpdate);
+        ImageButton btn = (ImageButton) mView.findViewById(R.id.fe_btn_save);
+        //if (fe.getId() == -1) btn.setText(R.string.feBtnAdd);
+        //else btn.setText(R.string.feBtnUpdate);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -380,6 +383,39 @@ public class OperEditFragment extends Fragment  implements View.OnClickListener 
             viewImage();
         }
     }
+
+/*
+* ===================================================================================
+*               Working with menu
+* ===================================================================================
+*/
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_operation_editor, menu);
+        super.onCreateOptionsMenu(menu,inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        //noinspection SimplifiableIfStatement
+        switch (id) {
+            case R.id.action_make_photo: {
+                dispatchTakePictureIntent();
+                makePhotosPreview();
+                return true;
+            }
+            case R.id.action_clear_all_photo : {
+                // delete all photos from mPhotosList
+                deletePhotoFiles(mPhotosList);
+                // try delete all photos from db
+                dbCont.delAllPhotos(fe.getId());
+            }
+
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
 
 

@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
@@ -29,8 +30,8 @@ import db.DBTheme.Operation.OperationColumns;
  */
 public class DBHelper extends SQLiteOpenHelper {
     private static final String TAG = DBAdapter.class.getSimpleName();
-    private static final String DATABASE_NAME = "autocheck.db";
-    private static final int DATABASE_VERSION = 29;
+    private static final String DATABASE_NAME = "a4c.db";
+    private static final int DATABASE_VERSION = 5;
     private static final String DEBUG_TAG = DBHelper.class.getSimpleName();
     private static final boolean LOGV = true;
     public static final int OPR_STATE_INCOMPLETE = 0;
@@ -80,7 +81,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 + OperationColumns.PRICE+ " REAL NOT NULL, "
                 + OperationColumns.QTY+ " REAL NOT NULL, "
                 + OperationColumns.TYPE+ " INTEGER NOT NULL, "
-                + OperationColumns.STATE+ " INTEGER NOT NULL "
+                + OperationColumns.STATE+ " INTEGER NOT NULL, "
+                + OperationColumns.PQTY+ " REAL, "
+                + OperationColumns.QTYTRIP+ " REAL "
                 +");" );
 
         ContentValues values = new ContentValues();
@@ -155,6 +158,40 @@ public class DBHelper extends SQLiteOpenHelper {
             // Close the xml file
             xml.close();
         }
+
+        try {
+            final Cursor c = db.query(Operation.TABLE, new String[] {
+                    BaseColumns._ID,
+                    OperationColumns.QTY,
+                    OperationColumns.TRIP},
+                    null, null, null, null, BaseColumns._ID);
+            long pid=-1, id;
+            float pqty, qty=0, trip, qtytrip;
+            if (c.moveToFirst()) {
+                do {
+                    id = c.getLong(0);
+                    trip = c.getLong(2);
+                    if (pid > 0) {
+                        pqty = qty;
+                        qtytrip = pqty/trip*100;
+                        String quer = String.format("UPDATE %s SET %s='%s', %s='%s' WHERE %s='%s'",
+                                Operation.TABLE,
+                                OperationColumns.PQTY, pqty,
+                                OperationColumns.QTYTRIP, qtytrip,
+                                BaseColumns._ID, id
+                        );
+                        db.execSQL(quer);
+                    }
+                    qty = c.getFloat(1);
+                    pid = id;
+
+                } while (c.moveToNext());
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+
 
         db.execSQL("CREATE TABLE " + DBTheme.Photos.TABLE + " (" + BaseColumns._ID
                         + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL , "
