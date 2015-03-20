@@ -87,7 +87,7 @@ public class OperEditFragment extends Fragment  implements View.OnClickListener 
 
         fe = new DBTheme.Operation();
         fe.setId(getArguments().getLong("id", -1));
-        fe.setId_auto(getArguments().getLong("id_auto", 1));
+        fe.setId_auto(getArguments().getLong("id_auto", 0));
         fe.setDate(getArguments().getString("date", ""));
 
         fe.setSumma(getArguments().getFloat("summa", 0));

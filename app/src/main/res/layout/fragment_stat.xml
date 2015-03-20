@@ -7,38 +7,43 @@
     android:layout_weight="1"
     tools:context="com.bagum.autochecking.StatFragment">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/statLastFill"
         android:id="@+id/textView9"
         android:textStyle="bold"
-        android:textSize="@dimen/abc_text_size_display_1_material" />
+        android:textSize="@dimen/abc_text_size_headline_material" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lastDate"
         android:id="@+id/last_date"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lastRate"
         android:id="@+id/last_rate"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lastQty"
         android:id="@+id/last_qty"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="lastTrip"
         android:id="@+id/last_trip"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,26 +51,29 @@
         android:text="Current Month"
         android:id="@+id/textView10"
         android:textStyle="bold"
-        android:textSize="@dimen/abc_text_size_display_1_material" />
+        android:textSize="@dimen/abc_text_size_headline_material" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="monthRate"
         android:id="@+id/month_rate"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="monthQty"
         android:id="@+id/month_qty"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="montTrip"
         android:id="@+id/month_trip"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
 
 
     <TextView
@@ -74,26 +82,29 @@
         android:text="Previous Month"
         android:id="@+id/textView11"
         android:textStyle="bold"
-        android:textSize="@dimen/abc_text_size_display_1_material" />
+        android:textSize="@dimen/abc_text_size_headline_material" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pmonthRate"
         android:id="@+id/pmonth_rate"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pmonthQty"
         android:id="@+id/pmonth_qty"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="pmontTrip"
         android:id="@+id/pmonth_trip"
-        android:textSize="@dimen/abc_text_size_headline_material" />
+        android:textSize="@dimen/abc_text_size_medium_material"
+        android:textColor="#ff1047ff" />
 
 
 </LinearLayout>

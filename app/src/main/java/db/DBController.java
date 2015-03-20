@@ -35,7 +35,7 @@ public class DBController {
     private static int maxRowsInNames = -1;
 
     public DBController(Context context) {
-        Log.d(TAG, "MainController constr ");
+        //Log.d(TAG, "DBController constructor");
         dbhelper = new DBHelper(context);
         sqliteDB = dbhelper.getReadableDatabase();
     }
@@ -149,9 +149,17 @@ public class DBController {
     }
 
     public static void updateOperation(Operation Operation) {
-        String quer = String.format("update %s set %s='%s', %s='%s',"+
-                        " %s='%s', %s='%s', %s='%s', %s='%s'"+
-                        " where %s='%s'",
+        String quer = String.format("update %s "+
+                        "set %s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s', "+
+                        "%s='%s' "+
+                        "where %s='%s'",
                 // таблица
                 Operation.TABLE,
                 // колонки
@@ -249,6 +257,8 @@ public class DBController {
     }
 
     public Stat getStat(long id_auto) {
+        calcStat(id_auto);
+
         Stat stat = new Stat();
 
         final Calendar end = Calendar.getInstance();
@@ -330,6 +340,61 @@ public class DBController {
 
 
         return stat;
+    }
+
+    public void calcStat(long id_auto) {
+        try {
+            final Calendar end = Calendar.getInstance();
+            int year = end.get(Calendar.YEAR);
+            int month = end.get(Calendar.MONTH);
+            int day = end.get(Calendar.DAY_OF_MONTH);
+
+            Calendar start = Calendar.getInstance();
+            start.set(year, month, 1);
+            //start.roll(Calendar.MONTH, false);
+            //start.roll(Calendar.MONTH, false);
+            //start.roll(Calendar.MONTH, false);
+            start.roll(Calendar.YEAR, false);
+
+
+            Date ds = new Date(start.getTimeInMillis());
+            Date de = new Date(end.getTimeInMillis());
+
+
+            final Cursor c = sqliteDB.query(Operation.TABLE, new String[] {
+                            BaseColumns._ID,
+                            OperationColumns.QTY,
+                            OperationColumns.TRIP},
+                    OperationColumns.DATE + " BETWEEN '"+ds.getTime()+"' AND '"+de.getTime()+"' AND " + OperationColumns.ID_AUTO +" = '"+id_auto+"' ",
+                    null, null, null,
+                    OperationColumns.DATE + ", " +BaseColumns._ID);
+            long pid=-1, id;
+            float pqty, qty=0, trip, qtytrip;
+            if (c.moveToFirst()) {
+                do {
+                    id = c.getLong(0);
+                    trip = c.getLong(2);
+                    if (pid > 0) {
+                        pqty = qty;
+                        qtytrip = pqty/trip*100;
+                        String quer = String.format("UPDATE %s SET %s='%s', %s='%s' WHERE %s='%s'",
+                                Operation.TABLE,
+                                OperationColumns.PQTY, pqty,
+                                OperationColumns.QTYTRIP, qtytrip,
+                                BaseColumns._ID, id
+                        );
+                        sqliteDB.execSQL(quer);
+                    }
+                    qty = c.getFloat(1);
+                    pid = id;
+
+                } while (c.moveToNext());
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.e(TAG, e.getMessage());
+        }
+
     }
 
 }

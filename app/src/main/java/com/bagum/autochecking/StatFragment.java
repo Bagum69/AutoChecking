@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,21 +25,13 @@ import db.Stat;
 public class StatFragment extends PlaceholderFragment {
     DBController dbCont;
     View mView;
+    long id_auto;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-
-    public static StatFragment newInstance(int sectionNumber) {
+    public static StatFragment newInstance(int sectionNumber, long id_auto) {
         StatFragment fragment = new StatFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putLong("id_auto", id_auto);
         fragment.setArguments(args);
         return fragment;
     }
@@ -50,10 +43,6 @@ public class StatFragment extends PlaceholderFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -61,8 +50,18 @@ public class StatFragment extends PlaceholderFragment {
                              Bundle savedInstanceState) {
         mView = inflater.inflate(R.layout.fragment_stat, container, false);
 
+        id_auto = getArguments().getLong("id_auto", 1);
+        getStat(id_auto);
+
+
+        // Inflate the layout for this fragment
+        return mView;
+    }
+
+    private void getStat(long id_auto) {
+
         dbCont = new DBController(getActivity().getBaseContext());
-        Stat stat = dbCont.getStat(2);
+        Stat stat = dbCont.getStat(id_auto);
 
         TextView ld = (TextView)mView.findViewById(R.id.last_date);
         ld.setText(stat.getLastDateString());
@@ -95,10 +94,11 @@ public class StatFragment extends PlaceholderFragment {
         TextView pmt = (TextView)mView.findViewById(R.id.pmonth_trip);
         pmt.setText(stat.getPMonthTripString());
 
-
-
-        // Inflate the layout for this fragment
-        return mView;
     }
 
+    @Override
+    public void setIdFromActivity(long id_auto) {
+        this.id_auto = id_auto;
+        getStat(id_auto);
+    }
 }

@@ -25,6 +25,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 
 import java.util.Date;
@@ -61,10 +62,11 @@ public class WorkFragment extends PlaceholderFragment {
     Long id_auto;
 
 
-    public static WorkFragment newInstance(int sectionNumber) {
+    public static WorkFragment newInstance(int sectionNumber, long id_auto) {
         WorkFragment fragment = new WorkFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
+        args.putLong("id_auto", id_auto);
         fragment.setArguments(args);
         return fragment;
     }
@@ -122,12 +124,14 @@ public class WorkFragment extends PlaceholderFragment {
                             // restore postion spinner
                             if (id_auto != -1)  SelectSpinnerItemByValue(spinnerAutos, id_auto);
                             */
+                            id_auto = getArguments().getLong("id_auto", 1);
+
 
                             adapterOperation = dbCont.getAdapterOperation(mActivity.getBaseContext());
                             // Setup listView for Operation
                             fv = (ListView) mView.findViewById(R.id.flist);
 
-                            dbCont.changeCursorOperation(adapterOperation, Long.valueOf(2));//fv.getSelectedItemId()
+                            dbCont.changeCursorOperation(adapterOperation, id_auto);//fv.getSelectedItemId()
                             fv.setAdapter(adapterOperation);
                             View v = mActivity.getLayoutInflater().inflate(R.layout.row_fuel_header, null);
                             fv.addHeaderView(v);
@@ -169,14 +173,19 @@ public class WorkFragment extends PlaceholderFragment {
         Cursor cursor = adapterOperation.getCursor();
         if (cursor != null) {
             try {
-                cursor.moveToFirst();// in first record placed last data
                 Date d = new Date();
-
+                if (cursor.getCount() > 0) {
+                    cursor.moveToFirst();// in first record placed last data
+                    fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
+                    fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
+                }
+                else {
+                    fo.setOdo(Float.valueOf(0));
+                    fo.setTrip(Float.valueOf(0));
+                }
                 fo.setId(-1);
                 fo.setDate(d.getTime());
-                fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
-                fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
-                fo.setId_auto(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.ID_AUTO)));
+                fo.setId_auto(id_auto);
                 fo.setSumma(Float.valueOf(0));
                 fo.setPrice(Float.valueOf(0));
                 fo.setQty(Float.valueOf(0));
@@ -194,21 +203,26 @@ public class WorkFragment extends PlaceholderFragment {
     private void updateOperation() {
         Operation fo = new Operation();
         Cursor cursor = adapterOperation.getCursor();
-        cursor.moveToFirst();// in first record placed last data
+        if (cursor != null && cursor.getCount()>0) {
+            //cursor.moveToFirst();// in first record placed last data
 
-        fo.setId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
-        fo.setDate(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.DATE)));
-        fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
-        fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
-        fo.setSumma(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.SUMMA)));
-        fo.setPrice(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.PRICE)));
-        fo.setQty(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.QTY)));
+            fo.setId(cursor.getLong(cursor.getColumnIndex(BaseColumns._ID)));
+            fo.setDate(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.DATE)));
+            fo.setOdo(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.ODO)));
+            fo.setTrip(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.TRIP)));
+            fo.setSumma(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.SUMMA)));
+            fo.setPrice(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.PRICE)));
+            fo.setQty(cursor.getFloat(cursor.getColumnIndex(Operation.OperationColumns.QTY)));
 
-        fo.setId_auto(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.ID_AUTO)));
-        fo.setType(cursor.getInt(cursor.getColumnIndex(Operation.OperationColumns.TYPE)));
-        fo.setState(cursor.getInt(cursor.getColumnIndex(Operation.OperationColumns.STATE)));
+            fo.setId_auto(cursor.getLong(cursor.getColumnIndex(Operation.OperationColumns.ID_AUTO)));
+            fo.setType(cursor.getInt(cursor.getColumnIndex(Operation.OperationColumns.TYPE)));
+            fo.setState(cursor.getInt(cursor.getColumnIndex(Operation.OperationColumns.STATE)));
 
-        mListener.onFragmentInteraction(2, fo);
+            mListener.onFragmentInteraction(2, fo);
+        }
+        else
+            Toast.makeText(getActivity(), "Nothing to change!", Toast.LENGTH_SHORT).show();
+
     }
 
     private void deleteOperation() {
@@ -277,22 +291,11 @@ public class WorkFragment extends PlaceholderFragment {
     }
 
     @Override
-    public void onStop () {
-        super.onStop();
-
-        // We need an Editor object to make preference changes.
-        // All objects are from android.context.Context
-        try {
-            Cursor cursor = adapterSpin.getCursor();
-            Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
-            SharedPreferences settings = getActivity().getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putLong("id_auto", id_auto);
-            // Commit the edits!
-            editor.commit();
-        }
-        catch (Exception e) {
-            Log.d(TAG, e.getMessage());
-        }
+    public void setIdFromActivity(long id_auto) {
+        this.id_auto = id_auto;
+        dbCont.changeCursorOperation(adapterOperation, id_auto);
     }
+
+
+
 }

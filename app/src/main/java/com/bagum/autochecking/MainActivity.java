@@ -3,7 +3,9 @@ package com.bagum.autochecking;
 import android.app.Activity;
 
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
+import android.provider.BaseColumns;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -20,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
+
+import java.util.List;
 
 import db.DBController;
 import db.DBTheme;
@@ -62,8 +66,10 @@ public class MainActivity extends ActionBarActivity implements
         mSpinnerAutos = (Spinner) findViewById(R.id.spinner);
         mSpinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
-                //dbCont.changeCursorOperation(adapterOperation, id);
+                //Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
+
+                id_auto = id;
+                setIdToFragment(id);
             }
             public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
         });
@@ -91,15 +97,15 @@ public class MainActivity extends ActionBarActivity implements
         FragmentManager fragmentManager = getSupportFragmentManager();
         switch (position) {
             case 0: fragmentManager.beginTransaction()
-                    .replace(R.id.container, StatFragment.newInstance(position + 1))
+                    .replace(R.id.container, StatFragment.newInstance(position + 1, id_auto))
                     .commit();
                     break;
             case 1: fragmentManager.beginTransaction()
-                    .replace(R.id.container, WorkFragment.newInstance(position + 1))
+                    .replace(R.id.container, WorkFragment.newInstance(position + 1, id_auto))
                     .commit();
                     break;
             default: fragmentManager.beginTransaction()
-                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1, id_auto))
                     .commit();
                     break;
 
@@ -178,7 +184,7 @@ public class MainActivity extends ActionBarActivity implements
                 break;
             }
         }
-        Toast.makeText(this, "Cmd from fragment:"+cmd + " id:" + oper.getId(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "Cmd from fragment:"+cmd + " id:" + oper.getId(), Toast.LENGTH_SHORT).show();
     }
 
     //================================================================================
@@ -193,5 +199,36 @@ public class MainActivity extends ActionBarActivity implements
                 spnr.setSelection(position);
                 return;
             }
+    }
+    @Override
+
+    public void onStop () {
+        super.onStop();
+
+        // We need an Editor object to make preference changes.
+        // All objects are from android.context.Context
+        try {
+            Cursor cursor = mAdapterSpin.getCursor();
+            Long id_auto = cursor.getLong(cursor.getColumnIndex(BaseColumns._ID));
+            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("id_auto", id_auto);
+            // Commit the edits!
+            editor.commit();
+        }
+        catch (Exception e) {
+            Log.d(TAG, e.getMessage());
+        }
+    }
+
+    public void setIdToFragment(long id) {
+        List<Fragment> fragments = getSupportFragmentManager().getFragments();
+        for(Fragment fragment : fragments){
+            if(fragment != null & fragment.isVisible()){
+                if (PlaceholderFragment.class.isAssignableFrom(fragment.getClass())) {
+                    ((PlaceholderFragment) fragment).setIdFromActivity(id);
+                }
+            }
+        }
     }
 }
