@@ -87,7 +87,7 @@ public class Stat {
         return formatter.format(pmonthQty) + " " + "lit";
     }
 
-    public void setPMonthQty(float pmonthQty) {
+    public void sePtMonthQty(float pmonthQty) {
         this.pmonthQty = pmonthQty;
     }
 
@@ -99,7 +99,7 @@ public class Stat {
         return formatter.format(pmonthTrip) + " " + "km";
     }
     public void setPMonthTrip(float pmonthTrip) {
-        this.pmonthTrip = pmonthTrip;
+        this.monthTrip = pmonthTrip;
     }
 
     public float getMonthRate() {
