@@ -100,31 +100,7 @@ public class WorkFragment extends PlaceholderFragment {
                     @Override
                     public void run() {
                         try {
-                            // Inflate the layout for this fragment
-                            /*
-                            SharedPreferences settings = mActivity.getSharedPreferences(PREFS_NAME, 0);
-                            id_auto = settings.getLong("id_auto", -1);
-
-                            dbCont = new DBController(mActivity.getBaseContext());
-                            adapter = dbCont.getAdapter(mActivity.getBaseContext());
-
-                            // Make Spinner for select autos
-                            adapterSpin = dbCont.getAdapterSpin2(mActivity.getBaseContext());
-
-
-                            spinnerAutos = (Spinner) mView.findViewById(R.id.spinner);
-                            spinnerAutos.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    Log.d(TAG, "Spin itemSelect: position = " + position + ", id = " + id);
-                                    dbCont.changeCursorOperation(adapterOperation, id);
-                                }
-                                public void onNothingSelected(AdapterView<?> parent) {  Log.d(TAG, "Spin itemSelect: nothing");  }
-                            });
-                            spinnerAutos.setAdapter(adapterSpin);
-                            // restore postion spinner
-                            if (id_auto != -1)  SelectSpinnerItemByValue(spinnerAutos, id_auto);
-                            */
-                            id_auto = getArguments().getLong("id_auto", 1);
+                          id_auto = getArguments().getLong("id_auto", 1);
 
 
                             adapterOperation = dbCont.getAdapterOperation(mActivity.getBaseContext());

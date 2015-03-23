@@ -333,7 +333,7 @@ public class DBController {
             stat.setPMonthTrip(c.getFloat(1));
 
             c.close();
-            stat.setPMonthRate(stat.getPMonthQty()/stat.getPMonthTrip()*100);
+            if (stat.getPMonthTrip()>0) stat.setPMonthRate(stat.getPMonthQty()/stat.getPMonthTrip()*100);
         }catch (Exception e){
             Log.d(TAG, e.getMessage());
         }

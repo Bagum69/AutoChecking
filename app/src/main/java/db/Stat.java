@@ -2,6 +2,8 @@ package db;
 
 import android.text.format.DateFormat;
 
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
 import java.text.NumberFormat;
 import java.util.Date;
 import java.util.Formatter;
@@ -13,8 +15,10 @@ import java.util.Locale;
 public class Stat {
     Date date;
     NumberFormat formatter;
+    DecimalFormat dformatter;
     public Stat() {
         date = new Date();
+        dformatter = new DecimalFormat("#.00");
         formatter = NumberFormat.getNumberInstance(new Locale("ru", "RU"));
     }
 
@@ -24,7 +28,7 @@ public class Stat {
 
     public String getLastDateString() {
         DateFormat df = new DateFormat();
-        return df.format("dd.MM.yyyy", this.lastDate).toString();
+        return df.format("dd.MM.yy", this.lastDate).toString();
     }
 
     public void setLastDate(long lastDate) {
@@ -36,7 +40,7 @@ public class Stat {
     }
 
     public String getLastRateString() {
-        return formatter.format(lastRate) + " "+ "lit/100km";
+        return dformatter.format(lastRate).toString();//"lit/100km"
     }
 
     public void setLastRate(float lastRate) {
@@ -48,7 +52,7 @@ public class Stat {
     }
 
     public String getLastQtyString() {
-        return formatter.format(lastQty) + " " + "lit";
+        return dformatter.format(lastQty).toString();// + " " + "lit";
     }
 
     public void setLastQty(float lastQty) {
@@ -60,7 +64,7 @@ public class Stat {
     }
 
     public String getLastTripString() {
-        return formatter.format(lastTrip) + " " + "km";
+        return dformatter.format(lastTrip).toString();// + " " + "km";
     }
 
     public void setLastTrip(float lastTrip) {
@@ -72,7 +76,7 @@ public class Stat {
     }
 
     public String getPMonthRateString() {
-        return formatter.format(pmonthRate) + " "+ "lit/100km";
+        return dformatter.format(pmonthRate).toString();//+ " "+ "lit/100km";
     }
 
     public void setPMonthRate(float pmonthRate) {
@@ -84,10 +88,10 @@ public class Stat {
     }
 
     public String getPMonthQtyString() {
-        return formatter.format(pmonthQty) + " " + "lit";
+        return dformatter.format(pmonthQty).toString();// + " " + "lit";
     }
 
-    public void sePtMonthQty(float pmonthQty) {
+    public void setPMonthQty(float pmonthQty) {
         this.pmonthQty = pmonthQty;
     }
 
@@ -96,10 +100,10 @@ public class Stat {
     }
 
     public String getPMonthTripString() {
-        return formatter.format(pmonthTrip) + " " + "km";
+        return dformatter.format(pmonthTrip).toString();// + " " + "km";
     }
     public void setPMonthTrip(float pmonthTrip) {
-        this.monthTrip = pmonthTrip;
+        this.pmonthTrip = pmonthTrip;
     }
 
     public float getMonthRate() {
@@ -107,7 +111,7 @@ public class Stat {
     }
 
     public String getMonthRateString() {
-        return formatter.format(monthRate) + " "+ "lit/100km";
+        return dformatter.format(monthRate).toString();//+ " "+ "lit/100km";
     }
 
     public void setMonthRate(float monthRate) {
@@ -119,7 +123,7 @@ public class Stat {
     }
 
     public String getMonthQtyString() {
-        return formatter.format(monthQty) + " " + "lit";
+        return dformatter.format(monthQty).toString();// + " " + "lit";
     }
 
     public void setMonthQty(float monthQty) {
@@ -131,7 +135,7 @@ public class Stat {
     }
 
     public String getMonthTripString() {
-        return formatter.format(monthTrip) + " " + "km";
+        return dformatter.format(monthTrip).toString();// + " " + "km";
     }
     public void setMonthTrip(float monthTrip) {
         this.monthTrip = monthTrip;
